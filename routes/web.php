@@ -31,6 +31,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users/{user}/poems', [UserController::class, 'showPoems'])
+    ->name('users.poems');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

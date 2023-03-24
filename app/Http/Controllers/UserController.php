@@ -17,4 +17,16 @@ class UserController extends Controller
             'users' => $users,
         ]);
     }
+
+    public function showPoems(User $user): Response
+    {
+        $poems = $user->poems()
+            ->orderBy('title', 'asc')
+            ->paginate(24);
+
+        return Inertia::render('User/Poems', [
+            'user' => $user,
+            'poems' => $poems,
+        ]);
+    }
 }
