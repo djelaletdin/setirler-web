@@ -21,6 +21,7 @@ class User extends Authenticatable
         'category_id',
         'name',
         'username',
+        'info',
         'email',
         'password',
     ];
