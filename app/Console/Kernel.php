@@ -15,6 +15,10 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
     }
 
+    protected $commands = [
+        Commands\GeneratePoemSlugs::class,
+    ];
+
     /**
      * Register the commands for the application.
      */
