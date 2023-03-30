@@ -14,7 +14,7 @@ const props = defineProps({
     <Layout>
         <div class="py-12 flex items-center">
             <div class="max-w-prose mx-auto sm:px-6 lg:px-8">
-                <a :href="`/users/${poem.user.id}/poems`" class="text-gray-500 hover:underline">{{ poem.user.name }}</a>
+                <a :href="route('users.poems', { user: poem.user.username })" class="text-gray-500 hover:underline">{{ poem.user.name }}</a>
                 <h2 class="font-semibold text-center text-xl  text-gray-800 my-4">{{ poem.title }}</h2>
                 <pre class="text-lg font-serif">{{ poem.content }}</pre>
             </div>

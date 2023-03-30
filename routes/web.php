@@ -33,7 +33,7 @@ Route::get('/dashboard', function () {
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/users', 'index')->name('users.index');
-    Route::get('/users/{user}/poems', 'showPoems')->name('users.poems');
+    Route::get('/@{user:username}', 'showPoems')->name('users.poems');
 });
 
 Route::controller(PoemController::class)->group(function () {
