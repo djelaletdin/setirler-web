@@ -37,7 +37,7 @@ Route::controller(UserController::class)->group(function () {
 });
 
 Route::controller(PoemController::class)->group(function () {
-    Route::get('/poems/{poem}', 'show')->name('poems.show');
+    Route::get('/poems/{poem:slug}', 'show')->name('poems.show');
 });
 
 Route::middleware('auth')->group(function () {
