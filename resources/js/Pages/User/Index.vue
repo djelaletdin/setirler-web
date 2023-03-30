@@ -24,7 +24,7 @@ const props = defineProps({
                     <p class="font-normal text-gray-700 dark:text-gray-400">{{ user.poems_count }} eser</p>
                 </Link>
             </div>
-<!--            <Pagination :links="users.links" class="mt-6" />-->
+            <Pagination :links="users.links" class="mt-6" />
         </div>
         </div>
 

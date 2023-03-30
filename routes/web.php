@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PoemController;
 use Inertia\Inertia;
 
 /*
@@ -30,9 +31,14 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::get('/users/{user}/poems', [UserController::class, 'showPoems'])
-    ->name('users.poems');
+Route::controller(UserController::class)->group(function () {
+    Route::get('/users', 'index')->name('users.index');
+    Route::get('/users/{user}/poems', 'showPoems')->name('users.poems');
+});
+
+Route::controller(PoemController::class)->group(function () {
+    Route::get('/poems/{poem}', 'show')->name('poems.show');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

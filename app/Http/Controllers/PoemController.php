@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Poem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Inertia\Response;
+use Inertia\Inertia;
 
 class PoemController extends Controller
 {
@@ -38,7 +39,10 @@ class PoemController extends Controller
      */
     public function show(Poem $poem): Response
     {
-        //
+        $poem->load('user');
+        return Inertia::render('Poem/Show', [
+            'poem' => $poem,
+        ]);
     }
 
     /**
