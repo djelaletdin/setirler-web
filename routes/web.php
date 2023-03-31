@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\PoemsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PoemController;
 use Inertia\Inertia;
 
 /*
@@ -27,17 +27,26 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
+Route::get('/dash', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::controller(UserController::class)->group(function () {
-    Route::get('/users', 'index')->name('users.index');
-    Route::get('/@{user:username}', 'showPoems')->name('users.poems');
-});
+Route::get('/poems', function () {
+    return Inertia::render('Admin/Poems');
+})->middleware(['auth', 'verified'])->name('poems');
 
-Route::controller(PoemController::class)->group(function () {
-    Route::get('/poems/{poem:slug}', 'show')->name('poems.show');
+//admin
+Route::middleware('auth')->group(function () {
+
+    //users
+    Route::get('dash/users', [UsersController::class, 'index'])->name('users.index');
+    Route::get('dash/users/create', [UsersController::class, 'create'])->name('users.create');
+    Route::post('dash/users', [UsersController::class, 'store'])->name('users.store');
+    Route::get('dash/users/edit/{user}', [UsersController::class, 'edit'])->name('users.edit');
+    Route::put('dash/users/{user}', [UsersController::class, 'update'])->name('users.update');
+
+    //poems
+    Route::get('dash/poems', [PoemsController::class, 'index'])->name('poems.index');
 });
 
 Route::middleware('auth')->group(function () {

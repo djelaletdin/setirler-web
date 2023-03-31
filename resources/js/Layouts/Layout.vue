@@ -3,13 +3,12 @@ import { ref } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
-
-
 
 </script>
 
@@ -38,6 +37,15 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('users.index')" :active="route().current('users.index')">
                                     Ýazyjylar
                                 </NavLink>
+
+                                <NavLink :href="route('users.index')" :active="route().current('users.index')">
+                                    Users
+                                </NavLink>
+
+                                <NavLink :href="route('poems.index')" :active="route().current('poems.index')">
+                                    Poems
+                                </NavLink>
+
                             </div>
                         </div>
                         <!-- TODO Fix the implementation. Create computed property-->
@@ -123,6 +131,14 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
+
+                        <ResponsiveNavLink :href="route('users.index')" :active="route().current('users.index')">
+                            Users
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink :href="route('poems.index')" :active="route().current('poems.index')">
+                            Poems
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -154,8 +170,15 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <div class="pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden flex items-center justify-center">
+                    <section class="container mx-auto">
+                        <FlashMessage />
+                        <slot />
+                    </section>
+                </div>
             </main>
+
+
         </div>
     </div>
 </template>
