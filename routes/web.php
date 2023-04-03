@@ -41,7 +41,8 @@ Route::controller(PoemController::class)->group(function () {
     Route::get('/poems/{poem:slug}', 'show')->name('poems.show');
 });
 
-Route::post('/poems/{poem}/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::post('/poems/{poem}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+Route::post('/comments/{comment}/votes', [CommentController::class, 'vote'])->middleware('auth');
 
 
 Route::middleware('auth')->group(function () {

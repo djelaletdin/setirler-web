@@ -2,6 +2,8 @@
 import Layout from '@/Layouts/Layout.vue';
 import {Head, Link} from '@inertiajs/vue3';
 import { useForm } from '@inertiajs/vue3'
+import { router } from '@inertiajs/vue3'
+
 const props = defineProps({
     poem: Object,
     comments: Object,
@@ -11,6 +13,11 @@ const props = defineProps({
 const form = useForm({
     body: null,
 })
+
+function vote(comment, direction) {
+    router.post(`/comments/${comment.id}/votes`, { direction: direction }, {preserveScroll: true})
+    // comment.votes_count = comment.votes_count + direction
+}
 
 form.reset()
 
@@ -37,6 +44,15 @@ form.reset()
                 <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
                     <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{ comment.created_at }}</time>
                     <div class="text-sm font-normal text-gray-500 dark:text-gray-300">{{ comment.body }}</div>
+                </div>
+                <div>
+                    <button @click="vote(comment, 1)">
+                        Upvote
+                    </button>
+                    {{ comment.votes_count }}
+                    <button @click="vote(comment, -1)">
+                        Downvote
+                    </button>
                 </div>
             </li>
         </ol>

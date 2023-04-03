@@ -43,6 +43,26 @@ class CommentController extends Controller
 
         return redirect()->back();
     }
+    /**
+     * Adds vote to a comment
+     */
+    public function vote(Request $request, Comment $comment): RedirectResponse
+    {
+        $user = auth()->user();
+        $direction = (int) $request->input('direction');
+
+        if ($direction === 0) {
+            $user->votes()->where('comment_id', $comment->id)->delete();
+        } else {
+            $comment->vote(auth()->user(), $direction);
+        }
+
+        $comment->votes_count = $comment->votes()->sum('vote');
+        $comment->save();
+
+        return redirect()->back();
+    }
+
 
     /**
      * Display the specified resource.
