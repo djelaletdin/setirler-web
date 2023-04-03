@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Poem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -28,9 +29,19 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, Poem $poem): RedirectResponse
     {
-        //
+        $request->validate([
+            'body' => 'required|string',
+        ]);
+
+        $comment = new Comment();
+        $comment->user_id = auth()->user()->id; // Assuming only logged in users can comment
+        $comment->poem_id = $poem->id;
+        $comment->body = $request->body;
+        $comment->save();
+
+        return redirect()->back();
     }
 
     /**

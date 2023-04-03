@@ -74,8 +74,12 @@ class PoemController extends Controller
         $totalViews = $poem->views()->count();
 
         $poem->load('user');
+        $comments = $poem->comments;
+
+//        dd($comments);
         return Inertia::render('Poem/Show', [
             'poem' => $poem,
+            'comments' => $comments,
             'totalViews' => $totalViews,
         ]);
     }

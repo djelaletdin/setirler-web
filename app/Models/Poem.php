@@ -23,4 +23,9 @@ class Poem extends Model
     {
         return $this->hasMany(ViewCount::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

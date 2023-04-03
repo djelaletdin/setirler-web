@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PoemController;
+use App\Http\Controllers\CommentController;
 use Inertia\Inertia;
 
 /*
@@ -39,6 +40,9 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(PoemController::class)->group(function () {
     Route::get('/poems/{poem:slug}', 'show')->name('poems.show');
 });
+
+Route::post('/poems/{poem}/comments', [CommentController::class, 'store'])->name('comments.store');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
