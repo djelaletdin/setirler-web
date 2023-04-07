@@ -46,6 +46,10 @@ const showingNavigationDropdown = ref(false);
                                     Poems
                                 </NavLink>
 
+                                <NavLink :href="route('tags.index')" :active="route().current('tags.index')">
+                                    Tags
+                                </NavLink>
+
                             </div>
                         </div>
                         <!-- TODO Fix the implementation. Create computed property-->

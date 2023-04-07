@@ -23,6 +23,7 @@ class UsersController extends Controller
                     $query->where('name', 'like', "%{$search}%")
                     ->orWhere('username', 'like', "%{$search}%");
                 })
+                ->orderBy('id' , 'desc')
                 ->paginate(20)
                 ->withQueryString()
                 ->through(fn($user) => [

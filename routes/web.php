@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\TagsController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\PoemsController;
@@ -47,6 +48,13 @@ Route::middleware('auth')->group(function () {
 
     //poems
     Route::get('dash/poems', [PoemsController::class, 'index'])->name('poems.index');
+
+    //tags
+    Route::get('dash/tags', [TagsController::class, 'index'])->name('tags.index');
+    Route::get('dash/tags/create', [TagsController::class, 'create'])->name('tags.create');
+    Route::post('dash/tags', [TagsController::class, 'store'])->name('tags.store');
+    Route::get('dash/tags/edit/{tag}', [TagsController::class, 'edit'])->name('tags.edit');
+    Route::put('dash/tags/{tag}', [TagsController::class, 'update'])->name('tags.update');
 });
 
 Route::middleware('auth')->group(function () {

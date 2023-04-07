@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Category;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -24,5 +25,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory(101)->create();
+        Tag::factory(7)->create();
     }
 }
