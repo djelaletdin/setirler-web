@@ -1,12 +1,18 @@
 <?php
 
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
 use App\Http\Controllers\Admin\TagsController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\PoemsController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PoemController;
+use App\Http\Controllers\CommentController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +62,21 @@ Route::middleware('auth')->group(function () {
     Route::get('dash/tags/edit/{tag}', [TagsController::class, 'edit'])->name('tags.edit');
     Route::put('dash/tags/{tag}', [TagsController::class, 'update'])->name('tags.update');
 });
+
+//client
+Route::controller(UserController::class)->group(function () {
+    Route::get('/users', 'index')->name('users.index');
+    Route::get('/@{user:username}', 'showPoems')->name('users.poems');
+});
+
+Route::controller(PoemController::class)->group(function () {
+    Route::get('/poems/{poem:slug}', 'show')->name('poems.show');
+});
+
+Route::post('/poems/{poem}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+Route::post('/comments/{comment}/votes', [CommentController::class, 'vote'])->middleware('auth');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
