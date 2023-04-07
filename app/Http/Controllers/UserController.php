@@ -18,7 +18,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function showPoems(User $user): Response
+    public function show(User $user): Response
     {
         $poems = $user->poems()
             ->orderBy('title', 'asc')
