@@ -17,8 +17,7 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
-        "flowbite": "^1.6.3",
-        "lodash": "^4.17.21"
-
+        "@inertiajs/inertia-vue3": "^0.6.0",
+        "flowbite": "^1.6.3"
     }
 }
