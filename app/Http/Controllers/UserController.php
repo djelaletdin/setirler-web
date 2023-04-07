@@ -21,10 +21,11 @@ class UserController extends Controller
     public function show(User $user): Response
     {
         $poems = $user->poems()
+            ->with('tags')
             ->orderBy('title', 'asc')
             ->paginate(24);
 
-        return Inertia::render('User/Poems', [
+        return Inertia::render('User/Show', [
             'user' => $user,
             'poems' => $poems,
         ]);

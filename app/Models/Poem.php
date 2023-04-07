@@ -28,4 +28,9 @@ class Poem extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_poems');
+    }
 }
