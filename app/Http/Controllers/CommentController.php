@@ -93,6 +93,12 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment): RedirectResponse
     {
-        //
+        if ($comment->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $comment->delete();
+
+        return back();
     }
 }

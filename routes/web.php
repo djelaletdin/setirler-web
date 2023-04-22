@@ -42,7 +42,9 @@ Route::controller(PoemController::class)->group(function () {
 });
 
 Route::post('/poems/{poem}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+
 Route::post('/comments/{comment}/votes', [CommentController::class, 'vote'])->middleware('auth');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy')->middleware('auth');
 
 
 Route::middleware('auth')->group(function () {

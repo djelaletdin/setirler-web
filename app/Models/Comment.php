@@ -9,6 +9,16 @@ class Comment extends Model
 {
     use HasFactory;
 
+    public function poem()
+    {
+        return $this->belongsTo(Poem::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function votes()
     {
         return $this->hasMany(Vote::class);

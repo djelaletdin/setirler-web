@@ -3,6 +3,7 @@ import Layout from '@/Layouts/Layout.vue';
 import {Head, Link} from '@inertiajs/vue3';
 import { useForm } from '@inertiajs/vue3'
 import { router } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
     poem: Object,
@@ -18,6 +19,15 @@ function vote(comment, direction) {
     router.post(`/comments/${comment.id}/votes`, { direction: direction }, {preserveScroll: true})
     // comment.votes_count = comment.votes_count + direction
 }
+
+function canDelete(userId) {
+    return userId === usePage().props.auth.user.id;
+}
+
+function deleteComment(comment) {
+    router.delete(`/comments/${comment}/`, {preserveScroll: true})
+}
+
 
 form.reset()
 
@@ -42,8 +52,10 @@ form.reset()
                     <img class="rounded-full shadow-lg" src=""  alt=""/>
                 </span>
                 <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
-                    <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{ comment.created_at }}</time>
+<!--                    <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{ comment.created_at }}</time>-->
                     <div class="text-sm font-normal text-gray-500 dark:text-gray-300">{{ comment.body }}</div>
+                    <button v-if="canDelete(comment.user_id)" @click="deleteComment(comment.id)" class="text-sm font-normal text-gray-500 dark:text-gray-300">
+                        Delete</button>
                 </div>
                 <div>
                     <button @click="vote(comment, 1)">
