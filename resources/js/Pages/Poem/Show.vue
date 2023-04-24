@@ -43,6 +43,7 @@ form.reset()
                 <h2 class="font-semibold text-center text-xl  text-gray-800 my-4">{{ poem.title }}</h2>
                 <pre class="text-lg font-serif">{{ poem.content }}</pre>
                 <h2 class="font-semibold text-center text-md  text-gray-400 my-4">{{ totalViews }} gezek görüldi</h2>
+                <Link v-for="tag in poem.tags" class="bg-white text-gray-800 text-s font-medium mr-2 px-2.5 py-1.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</Link>
             </div>
         </div>
 

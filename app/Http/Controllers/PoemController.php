@@ -74,6 +74,7 @@ class PoemController extends Controller
         $totalViews = $poem->views()->count();
 
         $poem->load('user');
+        $poem->load('tags');
         $comments = $poem->comments;
 
 //        dd($comments);
