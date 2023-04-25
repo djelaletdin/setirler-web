@@ -43,7 +43,7 @@ class TagController extends Controller
             ->with(['user' => function ($query) {
                 $query->select('id', 'name');
             }])
-            ->orderByRaw("REPLACE(REPLACE(REPLACE(title, '\"', ''), '\'', ''), '«', '') ASC")
+            ->orderByTitleWithoutQuotes()
             ->paginate(24);
 
         return Inertia::render('Tag/Show', [
