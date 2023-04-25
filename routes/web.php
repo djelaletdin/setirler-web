@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PoemController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\TagController;
 use Inertia\Inertia;
 
 /*
@@ -45,6 +46,8 @@ Route::post('/poems/{poem}/comments', [CommentController::class, 'store'])->name
 
 Route::post('/comments/{comment}/votes', [CommentController::class, 'vote'])->middleware('auth');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy')->middleware('auth');
+
+Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
 
 
 Route::middleware('auth')->group(function () {

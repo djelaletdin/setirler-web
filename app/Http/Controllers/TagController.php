@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class TagController extends Controller
 {
@@ -38,7 +39,17 @@ class TagController extends Controller
      */
     public function show(Tag $tag): Response
     {
-        //
+        $poems = $tag->poems()
+            ->with(['user' => function ($query) {
+                $query->select('id', 'name');
+            }])
+            ->orderByRaw("REPLACE(REPLACE(REPLACE(title, '\"', ''), '\'', ''), '«', '') ASC")
+            ->paginate(24);
+
+        return Inertia::render('Tag/Show', [
+            'tag' => $tag,
+            'poems' => $poems,
+        ]);
     }
 
     /**

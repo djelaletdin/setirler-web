@@ -39,11 +39,11 @@ form.reset()
     <Layout>
         <div class="py-12 flex items-center">
             <div class="max-w-prose mx-auto sm:px-6 lg:px-8">
-                <a :href="route('users.show', { user: poem.user.username })" class="text-gray-500 hover:underline">{{ poem.user.name }}</a>
+                <Link :href="route('users.show', { user: poem.user.username })" class="text-gray-500 hover:underline">{{ poem.user.name }}</Link>
                 <h2 class="font-semibold text-center text-xl  text-gray-800 my-4">{{ poem.title }}</h2>
                 <pre class="text-lg font-serif">{{ poem.content }}</pre>
                 <h2 class="font-semibold text-center text-md  text-gray-400 my-4">{{ totalViews }} gezek görüldi</h2>
-                <Link v-for="tag in poem.tags" class="bg-white text-gray-800 text-s font-medium mr-2 px-2.5 py-1.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</Link>
+                <Link :href="route('tags.show', { tag: tag.slug })" v-for="tag in poem.tags" class="bg-white text-gray-800 text-s font-medium mr-2 px-2.5 py-1.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</Link>
             </div>
         </div>
 

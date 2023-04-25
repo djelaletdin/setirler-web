@@ -22,7 +22,7 @@ class UserController extends Controller
     {
         $poems = $user->poems()
             ->with('tags')
-            ->orderBy('title', 'asc')
+            ->orderByRaw("REPLACE(REPLACE(REPLACE(title, '\"', ''), '\'', ''), '«', '') ASC")
             ->paginate(24);
 
         return Inertia::render('User/Show', [
