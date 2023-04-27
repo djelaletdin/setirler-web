@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PoemController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\Admin\PoemController as AdminPoemController;
 use Inertia\Inertia;
 
 /*
@@ -49,6 +50,10 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 
 Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
 
+
+Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
+    Route::get('/admin', [AdminPoemController::class, 'index'])->name('profile.edit');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
