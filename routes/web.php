@@ -1,23 +1,23 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PoemController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TagController;
+
 use App\Http\Controllers\Admin\PoemController as AdminPoemController;
-use Inertia\Inertia;
+
 
 /*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+|--------------------------------------------------------------------------
+| Client Side
+|--------------------------------------------------------------------------
 |
 */
 
@@ -34,31 +34,45 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
 Route::controller(UserController::class)->group(function () {
     Route::get('/users', 'index')->name('users.index');
     Route::get('/@{user:username}', 'show')->name('users.show');
 });
 
+
 Route::controller(PoemController::class)->group(function () {
     Route::get('/poems/{poem:slug}', 'show')->name('poems.show');
 });
 
-Route::post('/poems/{poem}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
 
-Route::post('/comments/{comment}/votes', [CommentController::class, 'vote'])->middleware('auth');
-Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy')->middleware('auth');
+Route::controller(CommentController::class)->middleware('auth')->group(function () {
+    Route::post('/poems/{poem}/comments', 'store')->name('comments.store');
+    Route::post('/comments/{comment}/votes','vote');
+    Route::delete('/comments/{comment}', 'destroy')->name('comments.destroy');
+});
+
 
 Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
 
-
-Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
-    Route::get('/admin', [AdminPoemController::class, 'index'])->name('profile.edit');
-});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| Admin Side
+|--------------------------------------------------------------------------
+|
+*/
+
+Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
+    Route::get('/admin', [AdminPoemController::class, 'index'])->name('profile.edit');
+});
+
 
 require __DIR__.'/auth.php';
