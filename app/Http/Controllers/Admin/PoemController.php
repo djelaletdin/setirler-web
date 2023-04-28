@@ -23,8 +23,15 @@ class PoemController extends Controller
      */
     public function index(): Response
     {
-//        dd("ayy");
-        return Inertia::render('Admin/Poem/Index');
+        $poems = Poem::select('poems.id', 'poems.title', 'users.name as author_name', 'poems.view_count')
+            ->with('tags:name')
+            ->join('users', 'poems.user_id', '=', 'users.id')
+            ->orderByTitleWithoutQuotes()
+            ->paginate(20);
+
+        return Inertia::render('Admin/Poem/Index', [
+            'poems' => $poems,
+        ]);
     }
 
     /**
