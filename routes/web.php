@@ -71,7 +71,7 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
-    Route::get('/admin', [AdminPoemController::class, 'index'])->name('profile.edit');
+    Route::get('/admin/poems', [AdminPoemController::class, 'index'])->name('admin.poems.index');
 });
 
 

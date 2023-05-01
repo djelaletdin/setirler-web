@@ -21,16 +21,29 @@ class PoemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(Request $request)
     {
-        $poems = Poem::select('poems.id', 'poems.title', 'users.name as author_name', 'poems.view_count')
+        $search = $request->input('search');
+
+        $poems = Poem::select('poems.id', 'poems.title', 'users.name as author_name', 'view_count')
             ->with('tags:name')
             ->join('users', 'poems.user_id', '=', 'users.id')
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', '%'.$search.'%')
+                    ->orWhereHas('user', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%');
+                    })
+                    ->orWhereHas('tags', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%');
+                    });
+            })
             ->orderByTitleWithoutQuotes()
-            ->paginate(20);
+            ->paginate(10)
+            ->withQueryString();
 
         return Inertia::render('Admin/Poem/Index', [
             'poems' => $poems,
+            'filter' => $search
         ]);
     }
 
