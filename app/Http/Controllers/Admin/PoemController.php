@@ -76,7 +76,9 @@ class PoemController extends Controller
      */
     public function edit(Poem $poem): Response
     {
-        //
+        return Inertia::render('Admin/Poem/Edit', [
+            'poem' => $poem->load('user'),
+        ]);
     }
 
     /**
