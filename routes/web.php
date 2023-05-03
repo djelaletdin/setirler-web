@@ -71,9 +71,9 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
-    Route::get('/admin/poems', [AdminPoemController::class, 'index'])->name('admin.poems.index');
-    Route::get('/admin/poems/{poem:slug}/edit', [App\Http\Controllers\Admin\PoemController::class, 'edit'])->name('admin.poems.edit');
-    Route::put('/admin/poems/{poem}', [App\Http\Controllers\Admin\PoemController::class, 'update'])->name('admin.poems.update');
+    Route::get('/admin/poems', [AdminPoemController::class, 'index'])->name('poems.index');
+    Route::get('/admin/poems/{poem:slug}/edit', [AdminPoemController::class, 'edit'])->name('poems.edit');
+    Route::put('/admin/poems/{poem}', [AdminPoemController::class, 'update'])->name('poems.update');
     // ...
 });
 

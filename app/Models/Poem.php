@@ -9,6 +9,8 @@ class Poem extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['title', 'content', 'user_id'];
+
     public function getRouteKeyName()
     {
         return 'slug';

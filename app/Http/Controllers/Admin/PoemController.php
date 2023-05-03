@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Poem;
+use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
+
+use App\Models\User;
+use function Pest\Laravel\get;
 
 class PoemController extends Controller
 {
@@ -25,7 +29,7 @@ class PoemController extends Controller
     {
         $search = $request->input('search');
 
-        $poems = Poem::select('poems.id', 'poems.title', 'users.name as author_name', 'view_count')
+        $poems = Poem::select('poems.id', 'poems.title', 'poems.slug', 'users.name as author_name', 'view_count')
             ->with('tags:name')
             ->join('users', 'poems.user_id', '=', 'users.id')
             ->when($search, function ($query, $search) {
@@ -76,8 +80,13 @@ class PoemController extends Controller
      */
     public function edit(Poem $poem): Response
     {
+        $users = User::select('id', 'name')->get();
+        $tags = Tag::select('id', 'name')->get();
+
         return Inertia::render('Admin/Poem/Edit', [
             'poem' => $poem->load('user'),
+            'users' => $users,
+            'tags' => $tags
         ]);
     }
 
@@ -86,7 +95,26 @@ class PoemController extends Controller
      */
     public function update(Request $request, Poem $poem): RedirectResponse
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'author' => 'required|exists:users,id',
+//            'tags' => 'nullable|array',
+//            'tags.*' => 'exists:tags,id',
+        ]);
+
+        $poem->update([
+            'title' => $request->input('title'),
+            'user_id' => $request->input('author'),
+            'content' => $request->input('content'),
+        ]);
+
+//        $poem->tags()->sync($request->tags);
+
+        $poem->save();
+
+        return redirect()->route('admin.poems.edit', $poem->slug)->with('message', 'Poem successfully updated');
+
     }
 
     /**

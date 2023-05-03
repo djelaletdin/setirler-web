@@ -1,55 +1,97 @@
 <script setup>
-import { watch, ref } from 'vue';
-import Layout from '@/Layouts/Layout.vue';
-import {Head, Link, router} from '@inertiajs/vue3';
-import Pagination from "@/Components/Pagination.vue";
-import debounce from "lodash/debounce";
+import { Head, Link } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/inertia-vue3'
+import { ref } from 'vue'
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 const props = defineProps({
-    poems: Object,
-    filter: String
+    poem: Object,
+    users: Object
 })
 
-const search = ref(props.filter);
+const successMessage = ref('')
 
-watch(search, debounce(function (value) {
-    router.get('/admin/poems', { search: value}, { preserveState: true })
-    console.log(value)
-}, 300));
+const form = useForm({
+    title: props.poem.title,
+    author: props.poem.user.id,
+    content: props.poem.content,
+})
 
+const submitForm = async () => {
+    // form.put(route('admin.poems.update', props.poem.slug))
+
+    const response = await form.put(route('admin.poems.update', props.poem.slug))
+
+    if (response.success) {
+        successMessage.value = response.success
+    }
+}
 </script>
 
 <template>
-    <Head title="Admin Eserler" />
+    <Head title="Edit" />
 
-    <Layout>
+    <AdminLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Eserler</h2>
         </template>
 
+        <div v-if="successMessage" class="text-green-500">{{ successMessage }}</div>
+
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <form>
-                    <div class="mb-6">
-                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                        <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@flowbite.com" required>
-                    </div>
-                    <div class="mb-6">
-                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                    </div>
-                    <div class="flex items-start mb-6">
-                        <div class="flex items-center h-5">
-                            <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required>
+                <div class="container mx-auto py-4">
+                    <form @submit.prevent="submitForm">
+                        <div class="flex flex-col mb-4">
+                            <label class="mb-2 font-semibold text-gray-700 dark:text-white" for="title">
+                                Title:
+                            </label>
+                            <input
+                                v-model="form.title"
+                                type="text"
+                                id="title"
+                                name="title"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Enter the poem title"
+                                required
+                            />
                         </div>
-                        <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
-                    </div>
-                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-                </form>
+
+                        <div class="flex flex-col mb-4">
+                            <label for="author">Author:</label>
+                            <select v-model="form.author" id="author" name="author"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    required>
+                                <option disabled value="">Select an author</option>
+                                <option v-for="user in users" :key="user.id" :value="user.id" :selected="form.author === user.id">{{ user.name }}</option>
+                            </select>
+                        </div>
+
+                        <div class="flex flex-col mb-4">
+                            <label class="mb-2 font-semibold text-gray-700 dark:text-white" for="content">
+                                Content:
+                            </label>
+                            <textarea
+                                v-model="form.content"
+                                id="content"
+                                name="content"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 h-48 resize-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Enter the poem content"
+                                required
+                            ></textarea>
+                        </div>
+
+
+
+                        <button type="submit" class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                            Save
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 
-    </Layout>
+    </AdminLayout>
 </template>
 
 

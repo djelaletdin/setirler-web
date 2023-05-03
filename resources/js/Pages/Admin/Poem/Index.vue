@@ -26,8 +26,10 @@ watch(search, debounce(function (value) {
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Eserler</h2>
         </template>
-         <div class="m-8">
 
+
+
+         <div class="m-8">
                 <div class="relative overflow-x-auto border border-gray-100 sm:rounded-lg">
                     <div class="p-4 bg-white dark:bg-gray-900">
                         <label for="table-search" class="sr-only">Search</label>
@@ -58,7 +60,7 @@ watch(search, debounce(function (value) {
                         <tbody>
                         <tr v-if="poems" v-for="poem in poems.data" class="bg-white border-b hover:bg-gray-50 dark:hover:bg-gray-600">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                <a href="#" class="font-medium hover:underline">{{ poem.title }}</a>
+                                <Link :href="route('admin.poems.edit', { poem: poem.slug })" class="font-medium hover:underline">{{ poem.title }}</Link>
                             </th>
                             <td class="px-6 py-4">
                                 {{ poem.author_name}}
