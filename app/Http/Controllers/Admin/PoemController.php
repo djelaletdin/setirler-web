@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Poem;
-use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
 
+use App\Models\Poem;
+use App\Models\Tag;
 use App\Models\User;
-use function Pest\Laravel\get;
 
 class PoemController extends Controller
 {

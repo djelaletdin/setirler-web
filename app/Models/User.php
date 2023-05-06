@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Poem::class);
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 }

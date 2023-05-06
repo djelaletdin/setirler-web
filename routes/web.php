@@ -11,7 +11,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TagController;
 
 use App\Http\Controllers\Admin\PoemController as AdminPoemController;
-
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 
 /*
 |
@@ -74,6 +74,9 @@ Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::get('/admin/poems', [AdminPoemController::class, 'index'])->name('poems.index');
     Route::get('/admin/poems/{poem:slug}/edit', [AdminPoemController::class, 'edit'])->name('poems.edit');
     Route::put('/admin/poems/{poem}', [AdminPoemController::class, 'update'])->name('poems.update');
+
+    Route::get('/admin/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/admin/users/{user:username}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
     // ...
 });
 
