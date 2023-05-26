@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -70,9 +71,24 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id): Response
+    public function edit(User $user): Response
     {
-        //
+        $user->load('category');
+        $categories = Category::select('id', 'name')->get();
+
+        return Inertia::render('Admin/User/Edit', [
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'username'=> $user->username,
+                'email' => $user->email,
+                'category' => $user->category ? [
+                    'id' => $user->category->id,
+                    'name' => $user->category->name,
+                ] : null,
+            ],
+            'categories' => $categories,
+        ]);
     }
 
     /**
