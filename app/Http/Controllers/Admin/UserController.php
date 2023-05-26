@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
 
 use App\Models\User;
+use App\Models\Category;
 
 class UserController extends Controller
 {
@@ -94,9 +94,31 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(Request $request, User $user): RedirectResponse
     {
-        //
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string',
+            'category' => 'required',
+            'email' => 'email:rfc,dns'
+        ]);
+
+        $user->update([
+            'name' => $request->input('name'),
+            'username' => $request->input('username'),
+            'email' => $request->input('email'),
+            'category_id' => $request->input('category'),
+        ]);
+
+        if ($user->save()) {
+           $message = 'User successfully updated';
+        } else {
+            $message = 'User update failed.';
+        }
+
+        return redirect()->route('admin.users.edit', $user->username)->with('message', $message);
+
     }
 
     /**

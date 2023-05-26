@@ -14,14 +14,14 @@ const successMessage = ref('')
 const form = useForm({
     name: props.user.name,
     username: props.user.username,
-    email: props.user.content,
+    email: props.user.email,
     category: props.user.category.id,
 })
 
 const submitForm = async () => {
     // form.put(route('admin.poems.update', props.poem.slug))
 
-    const response = await form.put(route('admin.poems.update', props.poem.slug))
+    const response = await form.put(route('admin.users.update', props.user.username))
 
     if (response.success) {
         successMessage.value = response.success
@@ -43,7 +43,7 @@ const submitForm = async () => {
                 <div class="container mx-auto py-4">
                     <form @submit.prevent="submitForm">
                         <div class="flex flex-col mb-4">
-                            <label class="mb-2 font-semibold text-gray-700 dark:text-white" for="title">
+                            <label class="mb-2 font-semibold text-gray-700 dark:text-white" for="name">
                                 Name:
                             </label>
                             <input
@@ -59,14 +59,14 @@ const submitForm = async () => {
 
 
                         <div class="flex flex-col mb-4">
-                            <label class="mb-2 font-semibold text-gray-700 dark:text-white" for="title">
+                            <label class="mb-2 font-semibold text-gray-700 dark:text-white" for="username">
                                 Username:
                             </label>
                             <input
                                 v-model="form.username"
                                 type="text"
-                                id="title"
-                                name="title"
+                                id="username"
+                                name="username"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Enter the username"
                                 required
@@ -74,14 +74,14 @@ const submitForm = async () => {
                         </div>
 
                         <div class="flex flex-col mb-4">
-                            <label class="mb-2 font-semibold text-gray-700 dark:text-white" for="title">
+                            <label class="mb-2 font-semibold text-gray-700 dark:text-white" for="email">
                                 Email:
                             </label>
                             <input
                                 v-model="form.email"
-                                type="text"
-                                id="title"
-                                name="title"
+                                type="email"
+                                id="email"
+                                name="email"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Enter the email"
                                 required
