@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Poem;
+use App\Models\Tag;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class PoemController extends Controller
 {
@@ -23,7 +26,12 @@ class PoemController extends Controller
      */
     public function create(): Response
     {
-        //
+
+        $tags = Tag::select('id', 'name')->get();
+
+        return Inertia::render('Poem/Edit', [
+            'tags' => $tags
+        ]);
     }
 
     /**
@@ -31,7 +39,26 @@ class PoemController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        // Create a new Poem instance and set its properties from the validated data
+        $poem = new Poem();
+        $poem->title = $validatedData['title'];
+        $poem->content = $validatedData['content'];
+        $poem->user_id = Auth::user()->id;
+        // Save the poem to the database
+        $poem->save();
+
+        // Optionally, you can associate the poem with the authenticated user
+//        $user = Auth::user();
+//        $user->poems()->save($poem);
+
+        // Redirect the user to a confirmation page or the poem details page
+        return redirect()->route('poems.show', $poem->slug)->with('message', 'Poem successfully updated');
+
     }
 
     /**

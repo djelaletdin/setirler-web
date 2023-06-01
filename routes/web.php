@@ -41,8 +41,10 @@ Route::controller(UserController::class)->group(function () {
 });
 
 
-Route::controller(PoemController::class)->group(function () {
-    Route::get('/poems/{poem:slug}', 'show')->name('poems.show');
+Route::controller(PoemController::class)->name('poems.')->group(function () {
+    Route::get('/poems/create', 'create')->name('create');
+    Route::get('/poems/{poem:slug}', 'show')->name('show');
+    Route::post('/poems', 'store')->name('store');
 });
 
 

@@ -112,7 +112,7 @@ class PoemController extends Controller
 
         $poem->save();
 
-        return redirect()->route('admin.poems.edit', $poem->slug)->with('message', 'Poem successfully updated');
+        return redirect()->route('admin.poems.edit', $poem->slug)->with('message', 'Eseriňiz goşuldy');
 
     }
 
