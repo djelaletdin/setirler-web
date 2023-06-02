@@ -15,6 +15,7 @@ const form = useForm({
     title: props.poem.title,
     author: props.poem.user.id,
     content: props.poem.content,
+    status: props.poem.status,
 })
 
 const submitForm = async () => {
@@ -30,7 +31,6 @@ const submitForm = async () => {
 
 <template>
     <Head title="Edit" />
-
     <AdminLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Eserler</h2>
@@ -81,7 +81,14 @@ const submitForm = async () => {
                             ></textarea>
                         </div>
 
-
+                        <div class="flex items-center mb-4">
+                            <input id="status" name="status" type="checkbox"
+                                   :checked="form.status === 1"
+                                   @change="form.status = form.status === 1 ? 0 : 1"
+                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="status" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Published</label>
+                        </div>
+                        {{ props.poem.status }}
 
                         <button type="submit" class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
                             Save

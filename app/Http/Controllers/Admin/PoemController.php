@@ -24,11 +24,11 @@ class PoemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $search = $request->input('search');
 
-        $poems = Poem::select('poems.id', 'poems.title', 'poems.slug', 'users.name as author_name', 'view_count')
+        $poems = Poem::select('poems.id', 'poems.title', 'poems.slug', 'users.name as author_name', 'status')
             ->with('tags:name')
             ->join('users', 'poems.user_id', '=', 'users.id')
             ->when($search, function ($query, $search) {
@@ -49,6 +49,34 @@ class PoemController extends Controller
             'filter' => $search
         ]);
     }
+
+    public function unpublished(Request $request): Response
+    {
+        $search = $request->input('search');
+
+        $poems = Poem::select('poems.id', 'poems.title', 'poems.slug', 'users.name as author_name', 'status')
+            ->where('status', 0)
+            ->with('tags:name')
+            ->join('users', 'poems.user_id', '=', 'users.id')
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', '%'.$search.'%')
+                    ->orWhereHas('user', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%');
+                    })
+                    ->orWhereHas('tags', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%');
+                    });
+            })
+            ->orderByTitleWithoutQuotes()
+            ->paginate(10)
+            ->withQueryString();
+
+        return Inertia::render('Admin/Poem/Unpublished', [
+            'poems' => $poems,
+            'filter' => $search
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -94,11 +122,13 @@ class PoemController extends Controller
      */
     public function update(Request $request, Poem $poem): RedirectResponse
     {
+
+
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'author' => 'required|exists:users,id',
-//            'tags' => 'nullable|array',
+            'status' => 'required',
 //            'tags.*' => 'exists:tags,id',
         ]);
 
@@ -106,6 +136,7 @@ class PoemController extends Controller
             'title' => $request->input('title'),
             'user_id' => $request->input('author'),
             'content' => $request->input('content'),
+            'status'  => $request->input('status')
         ]);
 
 //        $poem->tags()->sync($request->tags);
