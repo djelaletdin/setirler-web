@@ -12,7 +12,11 @@ class UserController extends Controller
 {
     public function index(): Response
     {
-        $users = User::has('poems')->withCount('poems')->paginate(12);
+        $users = User::has('poems')
+            ->whereHas('poems', function ($query) {
+            $query->where('status', 1);
+            })
+            ->withCount('poems')->paginate(12);
         return Inertia::render('User/Index', [
             'users' => $users,
         ]);
@@ -21,6 +25,7 @@ class UserController extends Controller
     public function show(User $user): Response
     {
         $poems = $user->poems()
+            ->where('status', 1)
             ->with('tags')
             ->orderByTitleWithoutQuotes()
             ->paginate(24);
