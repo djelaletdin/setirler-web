@@ -15,11 +15,14 @@ class DashboardController extends Controller
 {
     public function index(): Response
     {
-        $startDate = Carbon::now()->subWeek(); // Start date is 1 week ago
-        $endDate = Carbon::now(); // End date is current time
+
+
+        $today = Carbon::now();
+        $startDate = $today->startOfWeek()->subWeek(); // Start date is 1 week ago
+        $endDate = $startDate->copy()->endOfWeek(); // End date is current time
 
         $topPoems = ViewCount::select('poem_id', DB::raw('COUNT(*) as views'))
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('updated_at', [$startDate, $endDate])
             ->groupBy('poem_id')
             ->orderBy('views', 'desc')
             ->take(10)
@@ -41,6 +44,8 @@ class DashboardController extends Controller
         });
 
         return Inertia::render('Dashboard', [
+            'startDate' => $startDate->format('m/d'),
+            'endDate' => $endDate->format('m/d'),
             'topPoems' => $topPoems,
         ]);
 
