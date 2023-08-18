@@ -16,7 +16,11 @@ class DashboardController extends Controller
     public function index(): Response
     {
 
-
+        /*
+        |--------------------------------------------------------------------------
+        | Top Poems
+        |--------------------------------------------------------------------------
+        */
         $today = Carbon::now();
         $startDate = $today->startOfWeek()->subWeek(); // Start date is 1 week ago
         $endDate = $startDate->copy()->endOfWeek(); // End date is current time
@@ -43,10 +47,21 @@ class DashboardController extends Controller
             return $item;
         });
 
+        /*
+        |--------------------------------------------------------------------------
+        | New Poems
+        |--------------------------------------------------------------------------
+        */
+        $newPoems = Poem::select('title', 'slug', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
+
         return Inertia::render('Dashboard', [
             'startDate' => $startDate->format('m/d'),
             'endDate' => $endDate->format('m/d'),
             'topPoems' => $topPoems,
+            'newPoems' => $newPoems,
         ]);
 
     }
