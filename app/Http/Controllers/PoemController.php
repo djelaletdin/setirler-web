@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
 class PoemController extends Controller
 {
     /**
@@ -72,33 +72,37 @@ class PoemController extends Controller
             // Check if the current user has already viewed the poem
             $viewCount = $poem->views()->where('user_id', $user->id)->first();
 
-            if ($viewCount) {
-                // Update the existing view count record for the user
-                $viewCount->touch();
-            } else {
-                // Create a new view count record for the user
+//            if ($viewCount) {
+//                // Update the existing view count record for the user
+//                $viewCount->touch();
+//            } else {
+//                // Create a new view count record for the user
                 $poem->views()->create([
                     'user_id' => $user->id,
                 ]);
-            }
+//            }
         } else {
             // Check if the guest user's IP address has already viewed the poem
             $ipAddress = request()->ip();
             $viewCount = $poem->views()->where('ip_address', $ipAddress)->first();
 
-            if ($viewCount) {
-                // Update the existing view count record for the guest user
-                $viewCount->touch();
-            } else {
+//            if ($viewCount) {
+//                // Update the existing view count record for the guest user
+//                $viewCount->touch();
+//            } else {
                 // Create a new view count record for the guest user
                 $poem->views()->create([
                     'ip_address' => $ipAddress,
                 ]);
-            }
+//            }
         }
 
         // Get the total number of views for the poem
+
         $totalViews = $poem->views()->count();
+
+        // Get the unique number of views for the poem
+        $uniqueViews = $poem->uniqueViews();
 
         $poem->load('user');
         $poem->load('tags');
@@ -109,6 +113,7 @@ class PoemController extends Controller
             'poem' => $poem,
             'comments' => $comments,
             'totalViews' => $totalViews,
+            'uniqueViews' => $uniqueViews
         ]);
     }
 

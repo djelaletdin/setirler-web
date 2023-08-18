@@ -45,6 +45,13 @@ class Poem extends Model
         return $this->hasMany(ViewCount::class);
     }
 
+    public function uniqueViews()
+    {
+        return $this->views()
+            ->selectRaw('COUNT(DISTINCT CASE WHEN user_id IS NOT NULL THEN user_id ELSE ip_address END) as unique_views')
+            ->value('unique_views');
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
