@@ -62,17 +62,28 @@ class PoemController extends Controller
      */
     public function show(Poem $poem): Response
     {
+
+
         // Keep track of viewing for both users and guests
         $user = auth()->user();
-        if ($user) {
-            $poem->views()->create([
-                'user_id' => $user->id,
-            ]);
-        } else {
-            $ipAddress = request()->ip();
-            $poem->views()->create([
-                'ip_address' => $ipAddress,
-            ]);
+
+        // Get the last view record for the user or IP address
+        $lastView = $user
+            ? $poem->views()->where('user_id', $user->id)->latest()->first()
+            : $poem->views()->where('ip_address', request()->ip())->latest()->first();
+
+        // Check if there is a last view within a minutes
+        if (!$lastView || $lastView->created_at->diffInMinutes(now()) >= 1) {
+            if ($user) {
+                $poem->views()->create([
+                    'user_id' => $user->id,
+                ]);
+            } else {
+                $ipAddress = request()->ip();
+                $poem->views()->create([
+                    'ip_address' => $ipAddress,
+                ]);
+            }
         }
 
         $totalViews = $poem->totalViews();
