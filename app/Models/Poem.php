@@ -45,6 +45,11 @@ class Poem extends Model
         return $this->hasMany(ViewCount::class);
     }
 
+    public function totalViews()
+    {
+        return $this->views()->count();
+    }
+
     public function uniqueViews()
     {
         return $this->views()

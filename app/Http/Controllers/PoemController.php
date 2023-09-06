@@ -52,10 +52,6 @@ class PoemController extends Controller
         // Save the poem to the database
         $poem->save();
 
-        // Optionally, you can associate the poem with the authenticated user
-//        $user = Auth::user();
-//        $user->poems()->save($poem);
-
         // Redirect the user to a confirmation page or the poem details page
         return redirect()->route('poems.show', $poem->slug)->with('message', 'Poem successfully updated');
 
@@ -66,49 +62,26 @@ class PoemController extends Controller
      */
     public function show(Poem $poem): Response
     {
+        // Keep track of viewing for both users and guests
         $user = auth()->user();
-
         if ($user) {
-            // Check if the current user has already viewed the poem
-            $viewCount = $poem->views()->where('user_id', $user->id)->first();
-
-//            if ($viewCount) {
-//                // Update the existing view count record for the user
-//                $viewCount->touch();
-//            } else {
-//                // Create a new view count record for the user
-                $poem->views()->create([
-                    'user_id' => $user->id,
-                ]);
-//            }
+            $poem->views()->create([
+                'user_id' => $user->id,
+            ]);
         } else {
-            // Check if the guest user's IP address has already viewed the poem
             $ipAddress = request()->ip();
-            $viewCount = $poem->views()->where('ip_address', $ipAddress)->first();
-
-//            if ($viewCount) {
-//                // Update the existing view count record for the guest user
-//                $viewCount->touch();
-//            } else {
-                // Create a new view count record for the guest user
-                $poem->views()->create([
-                    'ip_address' => $ipAddress,
-                ]);
-//            }
+            $poem->views()->create([
+                'ip_address' => $ipAddress,
+            ]);
         }
 
-        // Get the total number of views for the poem
-
-        $totalViews = $poem->views()->count();
-
-        // Get the unique number of views for the poem
+        $totalViews = $poem->totalViews();
         $uniqueViews = $poem->uniqueViews();
 
         $poem->load('user');
         $poem->load('tags');
         $comments = $poem->comments;
 
-//        dd($comments);
         return Inertia::render('Poem/Show', [
             'poem' => $poem,
             'comments' => $comments,
