@@ -53,6 +53,7 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         */
         $newPoems = Poem::select('title', 'slug', 'created_at')
+            ->where('status', 1)
             ->orderBy('created_at', 'desc')
             ->take(10)
             ->get();
