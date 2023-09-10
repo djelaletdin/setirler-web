@@ -52,11 +52,17 @@ class DashboardController extends Controller
         | New Poems
         |--------------------------------------------------------------------------
         */
-        $newPoems = Poem::select('title', 'slug', 'created_at')
+        $newPoems = Poem::select('title', 'slug', 'content', 'created_at')
             ->where('status', 1)
             ->orderBy('created_at', 'desc')
             ->take(10)
             ->get();
+
+        // Break the content text when there are two consecutive line breaks
+        $newPoems = $newPoems->map(function ($poem) {
+            $poem->content = explode("\r\n\r\n", $poem->content)[0];
+            return $poem;
+        });
 
         return Inertia::render('Dashboard', [
             'startDate' => $startDate->format('m/d'),

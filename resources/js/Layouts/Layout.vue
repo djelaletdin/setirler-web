@@ -16,7 +16,7 @@ const showingNavigationDropdown = ref(false);
 <template>
     <div>
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+            <nav class="sticky top-0 z-40 w-full backdrop-blur flex-none lg:border-b transition-colors duration-500 bg-white/95">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-14">
@@ -167,8 +167,12 @@ const showingNavigationDropdown = ref(false);
                         </button>
                     </div>
                 </div>
+                <div class="w-full px-4 mx-auto max-w-8xl">
+                    <div class="lg:flex">
+                        <slot />
+                    </div>
+                </div>
 
-                <slot />
             </main>
         </div>
     </div>

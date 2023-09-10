@@ -19,35 +19,39 @@ const props = defineProps({
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Dashboard</h2>
         </template>
-        <div class="py-12">
+
+
+
+        <div class="flex-auto w-full min-w-0 lg:static lg:max-h-full lg:overflow-visible">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="font-semibold text-l text-gray-800  leading-tight">
                     Täze eserler
                 </h2>
 
-                <div class="grid grid-cols-1 px-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <Link :href="route('poems.show', { slug: poem.slug })" v-for="poem in newPoems" class="p-4 bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition duration-200 ease-in-out">
-                        <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">{{ poem.title }}</h5>
+                <div class="columns-1 max-w-sm p-6">
+                    <Link :href="route('poems.show', { slug: poem.slug })" v-for="poem in newPoems" class="py-4">
+                        <h5 class="py-1 text-lg font-bold tracking-tight text-gray-900 dark:text-white">{{ poem.title }}</h5>
                         <span v-for="tag in poem.tags" class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</span>
+                        <pre class="font-sans">{{poem.content}}</pre>
+                        <Link :href="route('poems.show', { slug: poem.slug })" class="inline-flex items-center text-blue-600 hover:underline">Dowamyny oka...</Link>
                     </Link>
                 </div>
             </div>
         </div>
 
-        <div class="py-12">
+        <aside class="fixed inset-0 z-20 flex-none bg-blue-50 hidden h-full w-72 lg:static lg:h-auto lg:overflow-y-visible lg:pt-0 lg:w-48 lg:block">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="font-semibold text-l text-gray-800  leading-tight">
                     Geçen hepdäniň iň köp okalanlary {{ startDate }} - {{ endDate }}
                 </h2>
 
-                <div class="grid grid-cols-1 px-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <Link :href="route('poems.show', { slug: poem.slug })" v-for="poem in topPoems" class="p-4 bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition duration-200 ease-in-out">
-                        <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">{{ poem.title }}</h5>
-                        <span v-for="tag in poem.tags" class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</span>
+                <ol>
+                    <Link :href="route('poems.show', { slug: poem.slug })" v-for="poem in topPoems">
+                        <li>{{ poem.title }}</li>
                     </Link>
-                </div>
+                </ol>
             </div>
-        </div>
+        </aside>
 
     </Layout>
 </template>
