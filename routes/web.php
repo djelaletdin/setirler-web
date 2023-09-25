@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LikeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -55,6 +56,9 @@ Route::controller(CommentController::class)->middleware('auth')->group(function 
     Route::delete('/comments/{comment}', 'destroy')->name('comments.destroy');
 });
 
+Route::controller(LikeController::class)->middleware('auth')->group(function () {
+    Route::post('/poems/{poem}/like', 'store')->name('like.store');
+});
 
 Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
 

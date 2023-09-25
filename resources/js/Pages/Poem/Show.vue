@@ -29,13 +29,18 @@ function deleteComment(comment) {
     router.delete(`/comments/${comment}/`, {preserveScroll: true})
 }
 
+function like(poem) {
+    // router.post(`/poems/${poem}/like`)
+    router.post(`/poems/${poem}/like`, {}, {preserveScroll: true})
+
+}
 
 form.reset()
 
 </script>
 
 <template>
-    <Head title="Ýazyjylar" />
+    <Head title="Ýazyjylar" ></Head>
 
     <Layout>
         <div class="py-12 flex items-center">
@@ -45,6 +50,12 @@ form.reset()
                 <pre class="text-lg font-serif">{{ poem.content }}</pre>
                 <h2 class="font-semibold text-center text-md  text-gray-400 my-4">{{ uniqueViews }} tarapyndan {{ totalViews }} gezek görüldi</h2>
                 <Link :href="route('tags.show', { tag: tag.slug })" v-for="tag in poem.tags" class="bg-white text-gray-800 text-s font-medium mr-2 px-2.5 py-1.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</Link>
+                <button @click="like(poem.slug)">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                    </svg>
+
+                </button>
             </div>
         </div>
 
