@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Like;
 use App\Models\Poem;
 use App\Models\Tag;
 
@@ -93,11 +94,14 @@ class PoemController extends Controller
         $poem->load('tags');
         $comments = $poem->comments;
 
+        $userLikedPoem = Like::userLikedPoem($user->id, $poem->id);
+
         return Inertia::render('Poem/Show', [
             'poem' => $poem,
             'comments' => $comments,
             'totalViews' => $totalViews,
-            'uniqueViews' => $uniqueViews
+            'uniqueViews' => $uniqueViews,
+            'userLikedPoem' => $userLikedPoem,
         ]);
     }
 
