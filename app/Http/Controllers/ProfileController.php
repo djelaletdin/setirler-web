@@ -13,6 +13,24 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+
+    public function index(): Response
+    {
+        $user = auth()->user(); // Get the authenticated user
+
+        if ($user) {
+            $viewedPoems = $user->viewedPoems->map(function ($viewCount) {
+                return $viewCount->poem->only(['id', 'slug', 'title']);
+            });
+//            dd(collect($viewedPoems)->paginate(10));
+            return Inertia::render('Profile/Index', [
+                'viewedPoems' => collect($viewedPoems)->paginate(10),
+            ]);
+        } else {
+            return Inertia::render('Dashboard');
+        }
+    }
+
     /**
      * Display the user's profile form.
      */
