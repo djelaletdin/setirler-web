@@ -13,8 +13,8 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-                serif: ['"Noto Nastaliq Urdu"', 'serif'],
+                sans: ['Inter', 'sans-serif'],
+                serif: ['"Source Serif Pro"', 'serif'],
             },
         },
     },

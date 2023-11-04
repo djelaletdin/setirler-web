@@ -21,27 +21,26 @@ const props = defineProps({
         </template>
 
 
-
-        <div class="flex-auto w-full min-w-0 lg:static lg:max-h-full lg:overflow-visible">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto flex flex-col flex-col-reverse justify-between md:flex-row lg:gap-x-10" style="max-width: 900px;">
+            <div class="forum-main mx-auto w-full md:flex-1 xl:max-w-[835px]">
                 <h2 class="font-bold text-xl text-gray-800  leading-tight mb-5">
                     Täze eserler
                 </h2>
 
                 <div class="columns-1 max-w-sm">
                     <div class="mb-10" v-for="poem in newPoems" >
-                        <h5 class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">{{ poem.title }}</h5>
+                        <p>{{ poem.user.name }}</p>
+                        <h5 class="font-sans text-2xl font-semibold text-gray-900 text-xl pb-2">{{ poem.title }}</h5>
                         <span v-for="tag in poem.tags" class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</span>
-                        <pre class="font-sans">{{poem.content}}</pre>
+                        <pre class="font-serif text-gray-700 text-lg">{{poem.content}}</pre>
                         <Link :href="route('poems.show', { slug: poem.slug })" class="inline-flex items-center text-blue-600 hover:underline">Dowamyny oka...</Link>
                     </div>
                 </div>
-            </div>
         </div>
 
-        <aside class="fixed inset-0 z-20 flex-none bg-blue-50 hidden h-full w-72 lg:static lg:h-auto lg:overflow-y-visible lg:pt-0 lg:w-48 lg:block">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="font-semibold text-l text-gray-800  leading-tight">
+        <aside class="sticky hidden h-screen max-w-[266px] 2xl:block bg-[#1da1f2]" style="top: 90px;">
+            <div class="max-h-screen space-y-4 overflow-auto pb-15">
+                <h2 class="font-semibold text-l text-gray-800 ">
                     Geçen hepdäniň iň köp okalanlary {{ startDate }} - {{ endDate }}
                 </h2>
 
@@ -52,6 +51,6 @@ const props = defineProps({
                 </ol>
             </div>
         </aside>
-
+    </div>
     </Layout>
 </template>

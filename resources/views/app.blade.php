@@ -9,7 +9,9 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.cdnfonts.com/css/inter" rel="stylesheet">
+        <link href="https://fonts.cdnfonts.com/css/source-serif-pro" rel="stylesheet">
+
 
         <!-- Scripts -->
         @routes
