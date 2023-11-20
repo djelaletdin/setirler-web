@@ -27,12 +27,14 @@ const props = defineProps({
                     Täze eserler
                 </h2>
 
+
+
                 <div class="columns-1 max-w-sm">
                     <div class="mb-10" v-for="poem in newPoems" >
-                        <p>{{ poem.user.name }}</p>
+                        <p class="text-gray-500 pb-2">{{ poem.user.name }} | {{ poem.date }}</p>
                         <h5 class="font-sans text-2xl font-semibold text-gray-900 text-xl pb-2">{{ poem.title }}</h5>
                         <span v-for="tag in poem.tags" class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</span>
-                        <pre class="font-serif text-gray-700 text-lg">{{poem.content}}</pre>
+                        <pre class="font-serif text-gray-700 text-lg pb-2">{{poem.content}}</pre>
                         <Link :href="route('poems.show', { slug: poem.slug })" class="inline-flex items-center text-blue-600 hover:underline">Dowamyny oka...</Link>
                     </div>
                 </div>

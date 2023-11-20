@@ -62,6 +62,7 @@ class DashboardController extends Controller
         // Break the content text when there are two consecutive line breaks
         $newPoems = $newPoems->map(function ($poem) {
             $poem->content = explode("\r\n\r\n", $poem->content)[0];
+            $poem->date = date('M d', strtotime($poem->created_at));
             return $poem;
         });
 
