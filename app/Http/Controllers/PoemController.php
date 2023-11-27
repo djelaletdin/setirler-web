@@ -30,7 +30,7 @@ class PoemController extends Controller
 
         $tags = Tag::select('id', 'name')->get();
 
-        return Inertia::render('Poem/Edit', [
+        return Inertia::render('Poem/Create', [
             'tags' => $tags
         ]);
     }

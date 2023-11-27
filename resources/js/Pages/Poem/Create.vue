@@ -28,7 +28,7 @@ const submitForm = async () => {
 </script>
 
 <template>
-    <Head title="Edit" />
+    <Head title="Create" />
 
     <Layout>
         <template #header>
