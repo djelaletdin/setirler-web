@@ -12,13 +12,12 @@
         <link href="https://fonts.cdnfonts.com/css/inter" rel="stylesheet">
         <link href="https://fonts.cdnfonts.com/css/source-serif-pro" rel="stylesheet">
 
-
         <!-- Scripts -->
         @routes
-        @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
+            @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
-        @inertia
+    @inertia
     </body>
 </html>
