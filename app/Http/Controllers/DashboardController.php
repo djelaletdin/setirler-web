@@ -35,15 +35,19 @@ class DashboardController extends Controller
         $poemIds = $topPoems->pluck('poem_id');
 
         $poems = Poem::whereIn('id', $poemIds)
-            ->select('id', 'title', 'slug')
-            ->with('tags:name')
+            ->select('id', 'title', 'content', 'slug', 'user_id', 'created_at')
+            ->with('user:id,name')
+//            ->with('tags:name')
             ->get();
 
         $topPoems = $topPoems->map(function ($item) use ($poems) {
             $poem = $poems->where('id', $item->poem_id)->first();
+            $item->content = explode("\r\n\r\n", $poem->content)[0];
             $item->title = $poem->title;
             $item->slug = $poem->slug;
-            $item->tags = $poem->tags;
+//            $item->tags = $poem->tags;
+            $item->user = $poem->user;
+            $item->date = date('M d', strtotime($poem->created_at));
             return $item;
         });
 

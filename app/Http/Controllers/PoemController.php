@@ -94,7 +94,7 @@ class PoemController extends Controller
         $poem->load('tags');
         $comments = $poem->comments;
 
-        $userLikedPoem = Like::userLikedPoem($user->id, $poem->id);
+        $userLikedPoem = $user && Like::userLikedPoem($user->id, $poem->id);
 
         return Inertia::render('Poem/Show', [
             'poem' => $poem,
