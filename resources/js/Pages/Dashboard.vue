@@ -8,7 +8,8 @@ const props = defineProps({
     startDate: String,
     endDate: String,
     topPoems: Object,
-    newPoems: Object
+    newPoems: Object,
+    newComments: Object
 })
 
 </script>
@@ -25,7 +26,7 @@ const props = defineProps({
         <div class="mx-auto flex flex-col-reverse justify-between md:flex-row lg:gap-x-10"
              style="max-width: 900px;">
             <div class="forum-main mx-auto w-full md:flex-1 xl:max-w-[835px]">
-                <div class="mb-4 border-b border-gray-200 ">
+                <div class="mb-4 border-b border-gray-200 sticky overflow-auto">
                     <ul class="flex text-sm font-medium text-center" id="default-tab"
                         data-tabs-toggle="#default-tab-content" role="tablist">
                         <li class="w-full" role="presentation">
@@ -73,17 +74,15 @@ const props = defineProps({
                 </div>
             </div>
 
-            <aside class="sticky hidden h-screen max-w-[266px] 2xl:block p-4 rounded-lg bg-gray-50" style="top: 90px;">
+            <aside class="sticky hidden h-screen w-[266px] 2xl:block p-4 rounded-lg bg-gray-50" style="top: 90px;">
                 <div class="max-h-screen space-y-4 overflow-auto pb-15">
                     <h2 class="font-semibold text-l text-gray-800 ">
-                        Geçen hepdäniň iň köp okalanlary {{ startDate }} - {{ endDate }}
+                        Soňky teswirler
                     </h2>
-
-                    <ol>
-                        <Link :href="route('poems.show', { slug: poem.slug })" v-for="poem in topPoems">
-                            <li>{{ poem.title }}</li>
-                        </Link>
-                    </ol>
+                    <div class="mb-10" v-for="comment in newComments">
+                        <Link :href="route('poems.show', { slug: comment.poem.slug })" class="text-gray-900 text-sm font-semibold pb-2">{{ comment.poem.title }}</Link>
+                        <div class="text-gray-500 text-sm pb-2">{{ comment.body }}</div>
+                    </div>
                 </div>
             </aside>
         </div>

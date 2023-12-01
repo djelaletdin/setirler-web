@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
@@ -70,11 +71,26 @@ class DashboardController extends Controller
             return $poem;
         });
 
+        /*
+        |--------------------------------------------------------------------------
+        | New Comments
+        |--------------------------------------------------------------------------
+        */
+        $newComments = Comment::select('user_id', 'poem_id', 'body', 'created_at')
+            ->with('user:id,name,username')
+            ->with('poem:id,slug,title')
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
+
+//        dd($newComments);
+
         return Inertia::render('Dashboard', [
             'startDate' => $startDate->format('m/d'),
             'endDate' => $endDate->format('m/d'),
             'topPoems' => $topPoems,
             'newPoems' => $newPoems,
+            'newComments' => $newComments
         ]);
 
     }
