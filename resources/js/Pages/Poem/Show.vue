@@ -23,7 +23,9 @@ function vote(comment, direction) {
 }
 
 function canDelete(userId) {
-    return userId === usePage().props.auth.user.id;
+    const user = usePage().props.auth;
+
+    return user && userId === user.id;
 }
 
 function deleteComment(comment) {
