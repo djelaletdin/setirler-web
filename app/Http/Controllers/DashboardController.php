@@ -79,6 +79,15 @@ class DashboardController extends Controller
         $newComments = Comment::select('user_id', 'poem_id', 'body', 'created_at')
             ->with('user:id,name,username')
             ->with('poem:id,slug,title')
+            ->whereIn('id', function ($query) {
+                // Subquery to get the latest comment for each poem
+                $query->select('id')
+                    ->from(DB::raw('(SELECT poem_id, MAX(created_at) as latest_date FROM comments GROUP BY poem_id) latest_comments'))
+                    ->join('comments', function ($join) {
+                        $join->on('comments.poem_id', '=', 'latest_comments.poem_id');
+                        $join->on('comments.created_at', '=', 'latest_comments.latest_date');
+                    });
+            })
             ->orderBy('created_at', 'desc')
             ->take(10)
             ->get();

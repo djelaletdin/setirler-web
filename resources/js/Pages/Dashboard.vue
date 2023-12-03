@@ -74,12 +74,12 @@ const props = defineProps({
                 </div>
             </div>
 
-            <aside class="sticky hidden h-screen w-[266px] 2xl:block p-4 rounded-lg bg-gray-50" style="top: 90px;">
+            <aside class="sticky hidden h-screen w-[266px] 2xl:block p-4 rounded-lg" style="top: 90px;">
                 <div class="max-h-screen space-y-4 overflow-auto pb-15">
                     <h2 class="font-semibold text-l text-gray-800 ">
-                        Soňky teswirler
+                        Gürrüňe goşul
                     </h2>
-                    <div class="mb-10" v-for="comment in newComments">
+                    <div class="mb-10 border-gray-200 border-b" v-for="comment in newComments">
                         <Link :href="route('poems.show', { slug: comment.poem.slug })" class="text-gray-900 text-sm font-semibold pb-2">{{ comment.poem.title }}</Link>
                         <div class="text-gray-500 text-sm pb-2">{{ comment.body }}</div>
                     </div>
