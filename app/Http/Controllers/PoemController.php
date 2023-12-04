@@ -92,7 +92,13 @@ class PoemController extends Controller
 
         $poem->load('user');
         $poem->load('tags');
-        $comments = $poem->comments;
+
+        $comments = $poem->comments()->with('user:id,name')->get()->map(function ($comment) {
+            $comment->date = date('M d', strtotime($comment->created_at));
+            $comment->user = $comment->user->name;
+            return $comment;
+        });
+
 
         $userLikedPoem = $user && Like::userLikedPoem($user->id, $poem->id);
 

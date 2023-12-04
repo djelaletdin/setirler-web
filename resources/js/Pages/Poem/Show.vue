@@ -23,8 +23,7 @@ function vote(comment, direction) {
 }
 
 function canDelete(userId) {
-    const user = usePage().props.auth;
-
+    const user = usePage().props.auth.user;
     return user && userId === user.id;
 }
 
@@ -67,25 +66,31 @@ form.reset()
             </div>
         </div>
 
-        <ol v-if="comments.length" class="relative mx-auto w-96 border-l border-gray-200">
-            <li v-for="comment in comments" :key="comment.id" class="mb-10 ml-6">
-                <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-                    <img class="rounded-full shadow-lg" src=""  alt=""/>
-                </span>
-                <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
-<!--                    <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{ comment.created_at }}</time>-->
-                    <div class="text-sm font-normal text-gray-500 dark:text-gray-300">{{ comment.body }}</div>
-                    <button v-if="canDelete(comment.user_id)" @click="deleteComment(comment.id)" class="text-sm font-normal text-gray-500 dark:text-gray-300">
-                        Delete</button>
-                </div>
-                <div>
-                    <button @click="vote(comment, 1)">
-                        Upvote
-                    </button>
-                    {{ comment.votes_count }}
-                    <button @click="vote(comment, -1)">
-                        Downvote
-                    </button>
+        <ol v-if="comments.length" class="relative mx-auto w-96">
+            <li v-for="comment in comments" :key="comment.id" class="group mb-4 ml-6">
+                <div class="items-center justify-between p-4 bg-white border border-transparent hover:border-gray-200 rounded-lg">
+                    <div class="flex gap-2 mb-2 text-sm ">
+                        <div class="font-semibold">{{ comment.user.name }}</div>
+                        <time class="mb-1 font-normal text-gray-400 sm:order-last sm:mb-0">{{ comment.date }}</time>
+
+                    </div>
+                    <div class="text-base font-normal text-gray-500 dark:text-gray-300">{{ comment.body }}</div>
+                    <div class="flex justify-between my-2">
+                        <div class="rounded-l bg-gray-500 py-1 px-2 inline">
+                            <button @click="vote(comment, 1)">
+                                +
+                            </button>
+                            {{ comment.votes_count }}
+                            <button class="invisible group-hover:visible" @click="vote(comment, -1)">
+                                -
+                            </button>
+                        </div>
+
+                        <button v-if="canDelete(comment.user_id)" @click="deleteComment(comment.id)" class="text-sm font-normal text-gray-500 hover:underline hover:text-red-600 invisible group-hover:visible">
+                            Delete
+                        </button>
+                    </div>
+
                 </div>
             </li>
         </ol>
