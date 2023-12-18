@@ -2,23 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use Inertia\Response;
 use Illuminate\Http\Request;
+use function Pest\Laravel\get;
 
 class UserController extends Controller
 {
-    public function index(): Response
+    public function index(Category $category = null): Response
     {
-        $users = User::has('poems')
-            ->whereHas('poems', function ($query) {
-            $query->where('status', 1);
-            })
-            ->withCount('poems')->paginate(12);
+
+        $categories = Category::all();
+        $selectedCategory = $category ? $category->id : 0;
+
+        if ($category === null) {
+            $users = User::has('poems')
+                ->whereHas('poems', function ($query) {
+                    $query->where('status', 1);
+                })
+                ->withCount('poems')->paginate(12);
+        } else {
+            $users = $category->users()->whereHas('poems')->paginate(12);
+        }
+
+
+
         return Inertia::render('User/Index', [
             'users' => $users,
+            'categories' => $categories,
+            'selectedCategory' => $selectedCategory,
         ]);
     }
 
