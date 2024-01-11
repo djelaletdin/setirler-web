@@ -6,6 +6,7 @@ use App\Models\Like;
 use App\Models\Poem;
 use App\Models\Tag;
 
+use App\Models\Vote;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -93,9 +94,12 @@ class PoemController extends Controller
         $poem->load('user');
         $poem->load('tags');
 
-        $comments = $poem->comments()->with('user:id,name')->get()->map(function ($comment) {
+        $comments = $poem->comments()->with('user:id,name')->get()->map(function ($comment) use ($user) {
             $comment->date = date('M d', strtotime($comment->created_at));
             $comment->user = $comment->user->name;
+            $comment->userVote = $user ? $comment->userVoteOnComment($user->id) : null;
+
+//            dd($comment->userVoteOnComment($user->id));
             return $comment;
         });
 

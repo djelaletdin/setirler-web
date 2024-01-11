@@ -61,4 +61,13 @@ class Comment extends Model
 
         $this->save();
     }
+
+    public function userVoteOnComment($userId)
+    {
+        $vote = $this->votes()->where('user_id', $userId)->first();
+        if ($vote) {
+            return $vote->vote; // 1 for like, -1 for dislike
+        }
+        return null; // User hasn't voted on this comment
+    }
 }

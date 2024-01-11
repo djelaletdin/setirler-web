@@ -47,9 +47,13 @@ form.reset()
     <Layout>
         <div class="py-12 flex items-center">
             <div class="max-w-prose mx-auto sm:px-6 lg:px-8">
-                <Link :href="route('users.show', { user: poem.user.username })" class="text-gray-500 hover:underline">{{ poem.user.name }}</Link>
-                <h2 class="font-semibold text-center text-xl  text-gray-800 my-4">{{ poem.title }}</h2>
-                <pre class="text-lg font-serif">{{ poem.content }}</pre>
+                <div class="flex flex-col justify-center items-center gap-1 my-3">
+<!--                    <div class="m-auto flex flex-col justify-center items-center">-->
+                        <h2 class="font-semibold text-center text-2xl text-gray-800">{{ poem.title }}</h2>
+                        <Link :href="route('users.show', { user: poem.user.username })" class="text-gray-500 text-lg hover:underline">{{ poem.user.name }}</Link>
+<!--                    </div>-->
+                </div>
+                <pre class="text-lg font-serif text-gray-800">{{ poem.content }}</pre>
                 <h2 class="font-semibold text-center text-md  text-gray-400 my-4">{{ uniqueViews }} tarapyndan {{ totalViews }} gezek görüldi</h2>
                 <Link :href="route('tags.show', { tag: tag.slug })" v-for="tag in poem.tags" class="bg-white text-gray-800 text-s font-medium mr-2 px-2.5 py-1.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</Link>
                 <button @click="like(poem.slug)">
@@ -67,8 +71,8 @@ form.reset()
         </div>
 
         <ol v-if="comments.length" class="relative mx-auto w-96">
-            <li v-for="comment in comments" :key="comment.id" class="group mb-4 ml-6">
-                <div class="items-center justify-between p-4 bg-white border border-transparent hover:border-gray-200 rounded-lg">
+            <li v-for="comment in comments" :key="comment.id" class="mb-4 ml-6">
+                <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg">
                     <div class="flex gap-2 mb-2 text-sm ">
                         <div class="font-semibold">{{ comment.user.name }}</div>
                         <time class="mb-1 font-normal text-gray-400 sm:order-last sm:mb-0">{{ comment.date }}</time>
@@ -76,18 +80,24 @@ form.reset()
                     </div>
                     <div class="text-base font-normal text-gray-500 dark:text-gray-300">{{ comment.body }}</div>
                     <div class="flex justify-between my-2">
-                        <div class="rounded-l bg-gray-500 py-1 px-2 inline">
-                            <button @click="vote(comment, 1)">
-                                +
+                        <div class="rounded-l flex flex-auto">
+                            <button :class="{ 'bg-green-100 border-green-200': comment.userVote === 1 }" class="border rounded hover:border-green-500 group hover:bg-green-100 "  @click="vote(comment, 1)">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" :class="{ 'fill-green-400': comment.userVote === 1 }"   class="w-5 h-5 fill-gray-500 group-hover:fill-green-500" >
+                                    <path fill-rule="evenodd" d="M10 15a.75.75 0 01-.75-.75V7.612L7.29 9.77a.75.75 0 01-1.08-1.04l3.25-3.5a.75.75 0 011.08 0l3.25 3.5a.75.75 0 11-1.08 1.04l-1.96-2.158v6.638A.75.75 0 0110 15z" clip-rule="evenodd" />
+                                </svg>
                             </button>
-                            {{ comment.votes_count }}
-                            <button class="invisible group-hover:visible" @click="vote(comment, -1)">
-                                -
+
+                            <div :class="{ 'text-green-500 font-bold': comment.userVote === 1,  'text-red-500 font-bold': comment.userVote === -1}" class="font-semibold px-2 text-gray-500">{{ comment.votes_count }}</div>
+
+                            <button :class="{ 'bg-red-100 border-red-200': comment.userVote === -1 }"  class="border rounded hover:border-red-500 group hover:bg-red-100 "  @click="vote(comment, -1)">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" :class="{ 'fill-red-400': comment.userVote === -1 }"  class="w-5 h-5 fill-gray-500 group-hover:fill-red-500 rotate-180">
+                                    <path fill-rule="evenodd" d="M10 15a.75.75 0 01-.75-.75V7.612L7.29 9.77a.75.75 0 01-1.08-1.04l3.25-3.5a.75.75 0 011.08 0l3.25 3.5a.75.75 0 11-1.08 1.04l-1.96-2.158v6.638A.75.75 0 0110 15z" clip-rule="evenodd" />
+                                </svg>
                             </button>
                         </div>
 
-                        <button v-if="canDelete(comment.user_id)" @click="deleteComment(comment.id)" class="text-sm font-normal text-gray-500 hover:underline hover:text-red-600 invisible group-hover:visible">
-                            Delete
+                        <button v-if="canDelete(comment.user_id)" @click="deleteComment(comment.id)" class="text-sm font-normal text-gray-500 hover:underline hover:text-red-600">
+                            Poz
                         </button>
                     </div>
 
@@ -95,16 +105,15 @@ form.reset()
             </li>
         </ol>
 
-
         <form @submit.prevent="form.post(`/poems/${poem.slug}/comments`, { preserveScroll: true, onSuccess: () => form.reset('body') })">
-            <div class="w-96 mx-auto mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+            <div class="w-96 mx-auto mb-4 border border-gray-200 rounded-lg">
                 <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
-                    <label for="body" class="sr-only">Your comment</label>
-                    <textarea id="body" v-model="form.body" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write a comment..." required></textarea>
+                    <label for="body" class="sr-only">Teswir</label>
+                    <textarea id="body" v-model="form.body" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:ring-0" placeholder="Teswir ýazyň..." required></textarea>
                 </div>
-                <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
+                <div class="flex items-center justify-end py-2 m-2 border-t">
                     <button type="submit" :disabled="form.processing" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-                        Post comment
+                        Ugrat
                     </button>
                 </div>
             </div>
