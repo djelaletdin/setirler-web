@@ -109,7 +109,7 @@ form.reset()
             <div class="w-96 mx-auto mb-4 border border-gray-200 rounded-lg">
                 <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                     <label for="body" class="sr-only">Teswir</label>
-                    <textarea id="body" v-model="form.body" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:ring-0" placeholder="Teswir ýazyň..." required></textarea>
+                    <textarea id="body" v-model="form.body" rows="4" class="w-full p-2 text-sm text-gray-900 bg-gray-50 border-0 rounded-lg focus:ring-0" placeholder="Teswir ýazyň..." required></textarea>
                 </div>
                 <div class="flex items-center justify-end py-2 m-2 border-t">
                     <button type="submit" :disabled="form.processing" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">

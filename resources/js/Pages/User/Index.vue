@@ -23,10 +23,10 @@ const props = defineProps({
         <div class="">
 
             <div class="flex items-center justify-center py-1.5 flex-wrap gap-4">
-                <Link :href="route('users.index')" type="button" :class="{'bg-red-200' : selectedCategory === 0}" class="text-gray-900 border border-white hover:border-gray-300 bg-white rounded-lg text-xs font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">
+                <Link :href="route('users.index')" type="button" class="text-gray-900 border border-white hover:border-gray-300 rounded-lg text-xs font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800" :class="{ 'bg-black text-white border-0 font-semibold': selectedCategory === 0, 'bg-white': selectedCategory !== 0 }" preserve-scroll>
                     Hemmesi
                 </Link>
-                <Link :href="route('users.index', {id: category.id})" v-for="category in categories" type="button" :class="{'bg-red-200' : selectedCategory === category.id}" class="text-gray-900 border border-white hover:border-gray-300 bg-white rounded-lg text-xs font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">
+                <Link :href="route('users.index', {id: category.id})" v-for="category in categories" type="button"  class="text-gray-900 border border-white hover:border-gray-300 rounded-lg text-xs font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800" :class="{ 'bg-black text-white border-0 font-semibold': selectedCategory === category.id, 'bg-white': selectedCategory !== category.id }" preserve-scroll>
                     {{ category.name }}
                 </Link>
             </div>

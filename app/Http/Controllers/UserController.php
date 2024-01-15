@@ -23,9 +23,15 @@ class UserController extends Controller
                 ->whereHas('poems', function ($query) {
                     $query->where('status', 1);
                 })
-                ->withCount('poems')->paginate(12);
+                ->select('id', 'name', 'username', 'photo')
+                ->withCount('poems')
+                ->paginate(12);
         } else {
-            $users = $category->users()->whereHas('poems')->paginate(12);
+            $users = $category->users()
+                ->whereHas('poems')
+                ->select('id', 'name', 'username', 'photo')
+                ->withCount('poems')
+                ->paginate(12);
         }
 
 
