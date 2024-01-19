@@ -66,4 +66,14 @@ class Poem extends Model
     {
         return $this->belongsToMany(Tag::class, 'tag_poems');
     }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function likeCount()
+    {
+        return $this->likes()->count();
+    }
 }

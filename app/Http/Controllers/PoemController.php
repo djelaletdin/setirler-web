@@ -65,6 +65,7 @@ class PoemController extends Controller
     public function show(Poem $poem): Response
     {
 
+        $poem = $poem->select('id', 'slug','title', 'content', 'user_id')->first();
 
         // Keep track of viewing for both users and guests
         $user = auth()->user();
@@ -91,8 +92,10 @@ class PoemController extends Controller
         $totalViews = $poem->totalViews();
         $uniqueViews = $poem->uniqueViews();
 
-        $poem->load('user');
-        $poem->load('tags');
+
+        $poem->load('user:id,username,name');
+        $poem->load('tags:id,name,slug');
+        $poem->likeCount = $poem->likeCount();
 
         $comments = $poem->comments()->with('user:id,name')->get()->map(function ($comment) use ($user) {
             $comment->date = date('M d', strtotime($comment->created_at));
