@@ -64,8 +64,8 @@ class PoemController extends Controller
      */
     public function show(Poem $poem): Response
     {
-
-        $poem = $poem->select('id', 'slug','title', 'content', 'user_id')->first();
+        // Lmits the columns visible to the users
+        $poem->makeHidden('created_at', 'updated_at','status');
 
         // Keep track of viewing for both users and guests
         $user = auth()->user();
