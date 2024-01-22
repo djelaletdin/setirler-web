@@ -46,14 +46,13 @@ form.reset()
 
     <Layout>
         <div class="py-12 flex items-center">
-            <div class="max-w-prose mx-auto sm:px-6 lg:px-8">
+            <div class="max-w-prose mx-auto sm:px-6 lg:px-8 selection:bg-orange-400 selection:text-white">
                 <div class="flex flex-col justify-center items-center gap-1 my-3">
-<!--                    <div class="m-auto flex flex-col justify-center items-center">-->
                         <h2 class="font-semibold text-center text-2xl text-gray-800">{{ poem.title }}</h2>
                         <Link :href="route('users.show', { user: poem.user.username })" class="text-gray-500 text-lg hover:underline">{{ poem.user.name }}</Link>
-<!--                    </div>-->
+                    <pre class="text-lg font-serif text-gray-800 py-1.5">{{ poem.content }}</pre>
                 </div>
-                <pre class="text-lg font-serif text-gray-800">{{ poem.content }}</pre>
+
                 <div class="flex gap-4 justify-center" >
 
                     <div class="flex items-center gap-0.5 min-w-0">
@@ -77,24 +76,20 @@ form.reset()
                         <h2 class="min-w-0 font-normal text-center text-md  text-gray-400 my-4">{{ poem.like }}{{ poem.likeCount }} Halanan</h2>
                     </div>
                 </div>
-
-
-
-
-                <Link :href="route('tags.show', { tag: tag.slug })" v-for="tag in poem.tags" class="bg-white text-gray-800 text-s font-medium mr-2 px-2.5 py-1.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</Link>
-
             </div>
         </div>
 
-        <ol v-if="comments.length" class="relative mx-auto w-96">
-            <li v-for="comment in comments" :key="comment.id" class="mb-4 ml-6">
+        <ol class="relative mx-auto w-96">
+            <Link :href="route('tags.show', { tag: tag.slug })" v-for="tag in poem.tags" class="mb-4 bg-gray-100 text-gray-800 text-s font-medium mr-2  px-2.5 py-1.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</Link>
+
+            <li v-if="comments.length" v-for="comment in comments" :key="comment.id" class="my-4">
                 <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg">
                     <div class="flex gap-2 mb-2 text-sm ">
                         <div class="font-semibold">{{ comment.user.name }}</div>
                         <time class="mb-1 font-normal text-gray-400 sm:order-last sm:mb-0">{{ comment.date }}</time>
-
                     </div>
                     <div class="text-base font-normal text-gray-500 dark:text-gray-300">{{ comment.body }}</div>
+
                     <div class="flex justify-between my-2">
                         <div class="rounded-l flex flex-auto">
                             <button :class="{ 'bg-green-100 border-green-200': comment.userVote === 1 }" class="border rounded hover:border-green-500 group hover:bg-green-100 "  @click="vote(comment, 1)">
@@ -121,14 +116,14 @@ form.reset()
             </li>
         </ol>
 
-        <form @submit.prevent="form.post(`/poems/${poem.slug}/comments`, { preserveScroll: true, onSuccess: () => form.reset('body') })">
-            <div class="w-96 mx-auto mb-4 border border-gray-200 rounded-lg">
+        <form @submit.prevent="form.post(`/poems/${poem.slug}/comments`, { preserveScroll: true, onSuccess: () => form.reset('body') })" class="w-96 mx-auto my-4">
+            <div class="mb-4 border border-gray-200 rounded-lg">
                 <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                     <label for="body" class="sr-only">Teswir</label>
                     <textarea id="body" v-model="form.body" rows="4" class="w-full p-2 text-sm text-gray-900 bg-gray-50 border-0 rounded-lg focus:ring-0" placeholder="Teswir ýazyň..." required></textarea>
                 </div>
                 <div class="flex items-center justify-end py-2 m-2 border-t">
-                    <button type="submit" :disabled="form.processing" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                    <button type="submit" :disabled="form.processing" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-black rounded-lg focus:ring-4 focus:ring-gray-200 hover:bg-gray-800">
                         Ugrat
                     </button>
                 </div>
