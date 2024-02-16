@@ -106,6 +106,7 @@ class PoemController extends Controller
             return $comment;
         });
 
+        $commentCount = $poem->comments()->count();
 
         $userLikedPoem = $user && Like::userLikedPoem($user->id, $poem->id);
 
@@ -115,6 +116,7 @@ class PoemController extends Controller
             'totalViews' => $totalViews,
             'uniqueViews' => $uniqueViews,
             'userLikedPoem' => $userLikedPoem,
+            'commentCount' => $comments->count()
         ]);
     }
 
