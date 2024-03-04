@@ -52,6 +52,7 @@ Route::controller(PoemController::class)->name('poems.')->group(function () {
 
 Route::controller(CommentController::class)->middleware('auth')->group(function () {
     Route::post('/poems/{poem}/comments', 'store')->name('comments.store');
+    Route::post('/comments/reply', 'store')->name('comments.reply');
     Route::post('/comments/{comment}/votes','vote');
     Route::delete('/comments/{comment}', 'destroy')->name('comments.destroy');
 });

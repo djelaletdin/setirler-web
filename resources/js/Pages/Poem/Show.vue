@@ -93,11 +93,18 @@ form.reset()
 
         <ol class="relative mx-auto w-96">
             <Link :href="route('tags.show', { tag: tag.slug })" v-for="tag in poem.tags" class="mb-4 bg-gray-100 text-gray-800 text-s font-medium mr-2  px-2.5 py-1.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ tag.name }}</Link>
-
             <li v-if="comments.length" v-for="comment in comments" :key="comment.id" class="my-4">
                 <Comment :comment = "comment"></Comment>
+
+                <ol  v-if="comment.replies.length" class="my-4 ml-5 relative border-gray-200 border-l pl-5">
+                    <li v-for="reply in comment.replies" :key="comment.id" class="mt-2">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                        <Comment :comment = "reply"></Comment>
+                    </li>
+                </ol>
+
             </li>
-            
+
         </ol>
 
         <form @submit.prevent="form.post(`/poems/${poem.slug}/comments`, { preserveScroll: true, onSuccess: () => form.reset('body') })" class="w-96 mx-auto my-4">

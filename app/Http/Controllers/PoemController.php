@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Poem;
 use App\Models\Tag;
@@ -102,7 +103,18 @@ class PoemController extends Controller
             $comment->user = $comment->user->name;
             $comment->userVote = $user ? $comment->userVoteOnComment($user->id) : null;
 
-//            dd($comment->userVoteOnComment($user->id));
+            $replies = Comment::where('parent_id', $comment->id)
+                ->with('user:id,name')
+                ->get()
+                ->map(function ($reply) use ($user) {
+                    $reply->date = date('M d', strtotime($reply->created_at));
+                    $reply->user = $reply->user->name;
+                    $reply->userVote = $user ? $reply->userVoteOnComment($user->id) : null;
+
+                    return $reply;
+                });
+
+            $comment->replies = $replies;
             return $comment;
         });
 

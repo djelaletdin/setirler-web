@@ -35,10 +35,18 @@ class CommentController extends Controller
             'body' => 'required|string',
         ]);
 
+        $parentCommentId = $request->input('parentCommentId'); // Assuming the parent comment ID is submitted along with the request
+
         $comment = new Comment();
-        $comment->user_id = auth()->user()->id; // Assuming only logged in users can comment
+        $comment->user_id = auth()->user()->id;
         $comment->poem_id = $poem->id;
         $comment->body = $request->body;
+
+        if ($parentCommentId) {
+            $parentComment = Comment::findOrFail($parentCommentId);
+            $comment->parent_id = $parentComment->id; // Set the parent comment ID if it exists
+        }
+
         $comment->save();
 
         return redirect()->back();
