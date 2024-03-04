@@ -19,29 +19,7 @@ const form = useForm({
     body: null,
 })
 
-function vote(comment, direction) {
-    router.post(`/comments/${comment.id}/votes`, { direction: direction }, {preserveScroll: true})
-    // comment.votes_count = comment.votes_count + direction
-}
-
-function canDelete(userId) {
-    const user = usePage().props.auth.user;
-    return user && userId === user.id;
-}
-
-function deleteComment(comment) {
-    router.delete(`/comments/${comment}/`, {preserveScroll: true})
-}
-
-function like(poem) {
-    // router.post(`/poems/${poem}/like`)
-    router.post(`/poems/${poem}/like`, {}, {preserveScroll: true, only: ['userLikedPoem', 'poem']})
-
-}
-
 form.reset()
-
-
 
 </script>
 
