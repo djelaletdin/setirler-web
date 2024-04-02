@@ -46,7 +46,7 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(PoemController::class)->name('poems.')->group(function () {
     Route::get('/poems/create', 'create')->name('create');
     Route::get('/poems/{poem:slug}', 'show')->name('show');
-    Route::post('/poems', 'store')->name('store');
+    Route::post('/poems', 'store')->middleware('auth')->name('store');
 });
 
 
@@ -64,11 +64,11 @@ Route::controller(LikeController::class)->middleware('auth')->group(function () 
 Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('tags.show');
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::controller(ProfileController::class)->middleware('auth')->group(function () {
+    Route::get('/profile', 'index')->name('profile.index');
+    Route::get('/profile/edit', 'edit')->name('profile.edit');
+    Route::patch('/profile', 'update')->name('profile.update');
+    Route::delete('/profile', 'destroy')->name('profile.destroy');
 });
 
 
