@@ -5,6 +5,8 @@ import { useForm } from '@inertiajs/vue3'
 import { router } from '@inertiajs/vue3'
 import { usePage } from '@inertiajs/vue3';
 import {onMounted, ref} from 'vue';
+import Dropdown from "@/Components/Dropdown.vue";
+import DropdownLink from "@/Components/DropdownLink.vue";
 
 const props = defineProps({
     comment: Object
@@ -47,9 +49,32 @@ function vote(comment, direction) {
 
 <template>
 <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg">
-    <div class="flex gap-2 mb-2 text-sm ">
-        <div class="font-semibold">{{ comment.user.name }}</div>
-        <time class="mb-1 font-normal text-gray-400 sm:order-last sm:mb-0">{{ comment.date }}</time>
+    <div class="flex justify-between mb-2 text-sm ">
+        <div class="flex gap-2 mb-2 text-sm ">
+            <div class="font-semibold">{{ comment.user.name }}</div>
+            <time class="mb-1 font-normal text-gray-400 sm:order-last sm:mb-0">{{ comment.date }}</time>
+        </div>
+        <div name="dropdown">
+            <Dropdown width="48">
+                <template #trigger>
+                    <span class="rounded-md">
+                        <button type="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 fill-gray-500">
+                                <path d="M3 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM8.5 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM15.5 8.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" />
+                            </svg>
+                        </button>
+                    </span>
+                </template>
+
+                <template #content>
+                    <!-- TODO create a report page   -->
+                    <DropdownLink > Report </DropdownLink>
+                    <button v-if="canDelete(comment.user_id)" @click="deleteComment(comment.id)" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 ">
+                        Poz
+                    </button>
+                </template>
+            </Dropdown>
+        </div>
     </div>
     <div class="text-base font-normal text-gray-500 dark:text-gray-300">{{ comment.body }}</div>
 
@@ -69,9 +94,7 @@ function vote(comment, direction) {
             </button>
         </div>
 
-        <button v-if="canDelete(comment.user_id)" @click="deleteComment(comment.id)" class="text-sm font-normal text-gray-500 hover:underline hover:text-red-600">
-            Poz
-        </button>
+
 
         <button @click="toggleReply(comment.id)" class="text-sm font-normal text-gray-500 hover:underline hover:text-blue-600">
                 Jogapla
