@@ -75,7 +75,7 @@ form.reset()
                 <Comment :comment = "comment"></Comment>
 
                 <ol  v-if="comment.replies.length" class="my-4 ml-5 relative border-gray-200 border-l pl-5">
-                    <li v-for="reply in comment.replies" :key="comment.id" class="mt-2">
+                    <li v-for="reply in comment.replies" :key="reply.id" class="mt-2">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
                         <Comment :comment = "reply"></Comment>
                     </li>

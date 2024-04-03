@@ -98,27 +98,22 @@ class PoemController extends Controller
         $poem->load('tags:id,name,slug');
         $poem->likeCount = $poem->likeCount();
 
-        $comments = $poem->comments()->with('user:id,name')->get()->map(function ($comment) use ($user) {
-            $comment->date = date('M d', strtotime($comment->created_at));
-            $comment->user = $comment->user->name;
-            $comment->userVote = $user ? $comment->userVoteOnComment($user->id) : null;
 
-            $replies = Comment::where('parent_id', $comment->id)
-                ->with('user:id,name')
-                ->get()
-                ->map(function ($reply) use ($user) {
-                    $reply->date = date('M d', strtotime($reply->created_at));
-                    $reply->user = $reply->user->name;
-                    $reply->userVote = $user ? $reply->userVoteOnComment($user->id) : null;
+        $comments = $poem->comments()
+            ->withCount('replies')
+            ->with(['user:id,name', 'replies.user:id,name', 'votes' => function ($query) use ($user) {
+                if ($user) {
+                    $query->where('user_id', $user->id); //get votes where user_id is equal to the authenticated user
+                }
+            }])
+            ->get()
+            ->map(function ($comment) use ($user) {
+                $comment->date = date('M d', strtotime($comment->created_at));
+                $comment->user = $comment->user->name;
+                $comment->userVote = $user ? $comment->votes->first()?->direction : null;
+                return $comment;
 
-                    return $reply;
-                });
-
-            $comment->replies = $replies;
-            return $comment;
-        });
-
-        $commentCount = $poem->comments()->count();
+            });
 
         $userLikedPoem = $user && Like::userLikedPoem($user->id, $poem->id);
 
