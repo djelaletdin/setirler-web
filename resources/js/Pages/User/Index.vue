@@ -8,8 +8,6 @@ const props = defineProps({
     selectedCategory: Number,
 })
 
-
-
 </script>
 
 <template>
