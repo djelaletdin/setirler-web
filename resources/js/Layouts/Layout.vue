@@ -43,6 +43,16 @@ onMounted(() => {
                                 </NavLink>
                             </div>
                         </div>
+                        <form action="/search/" method="get" class="hidden sm:block pl-2">
+                            <div class="relative mt-1 lg:w-96">
+                                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                    </svg>
+                                </div>
+                                <input type="text" maxlength="64" name="q" value="" id="topbar-search" class="bg-primary-50 border border-primary-300 text-primary-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-primary-700 dark:border-primary-600 dark:placeholder-primary-400 dark:text-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:hover:text-white" placeholder="Gözleg">
+                            </div>
+                        </form>
                         <!-- TODO Fix the implementation. Create computed property-->
                         <div v-if="$page.props.auth.user != null" class="hidden  sm:flex sm:items-center sm:ml-6">
                             <!-- Settings Dropdown -->
