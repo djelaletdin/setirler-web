@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Poem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 
@@ -42,6 +44,8 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => fn () => $request->session()->get('message')
             ],
+            'unpublished_count' => fn () => Poem::where('status',0)->count(),
+            'poems_count' => fn () => Poem::count(),
         ]);
     }
 }

@@ -18,10 +18,6 @@ const props = defineProps({
     <Head title="Dashboard"/>
 
     <Layout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
-        </template>
-
 
         <div class="mx-auto flex flex-col-reverse justify-between md:flex-row lg:gap-x-10"
              style="max-width: 900px;">

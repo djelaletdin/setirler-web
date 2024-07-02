@@ -50,6 +50,8 @@ class PoemController extends Controller
         ]);
     }
 
+
+
     public function unpublished(Request $request): Response
     {
         $search = $request->input('search');
@@ -144,6 +146,27 @@ class PoemController extends Controller
         $poem->save();
 
         return redirect()->route('admin.poems.edit', $poem->slug)->with('message', 'Eseriňiz goşuldy');
+
+    }
+
+    public function update_status(Request $request, string $slug):RedirectResponse
+    {
+
+        $request->validate([
+            'status' => 'required',
+        ]);
+
+        $poem = Poem::where('slug',$slug)->first();
+
+        $poem->update([
+            'status'  => $request->input('status')
+        ]);
+
+        $poem->save();
+
+        $title = $poem->title;
+
+        return redirect()->route('admin.poems.unpublished', $poem->slug)->with('message', "{$title}" . " Eser goşuldy");
 
     }
 

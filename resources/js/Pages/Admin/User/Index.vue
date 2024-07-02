@@ -27,7 +27,7 @@ watch(search, debounce(function (value) {
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Eserler</h2>
         </template>
 
-        <div class="m-8">
+
             <div class="relative overflow-x-auto border border-gray-100 sm:rounded-lg">
                 <div class="p-4 bg-white dark:bg-gray-900">
                     <label for="table-search" class="sr-only">Search</label>
@@ -38,6 +38,7 @@ watch(search, debounce(function (value) {
                         <input v-model="search"  type="text" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items">
                     </div>
                 </div>
+
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -58,7 +59,7 @@ watch(search, debounce(function (value) {
                     <tbody>
                     <tr v-if="users" v-for="user in users.data" class="bg-white border-b hover:bg-gray-50 dark:hover:bg-gray-600">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            <Link :href="route('admin.users.edit', { user: user })" class="font-medium hover:underline">{{ user.name }}</Link>
+                            <Link :href="route('admin.users.edit', { user: user.username })" class="font-medium hover:underline">{{ user.name }}</Link>
                         </th>
                         <td class="px-6 py-4">
                             @{{ user.username }}
@@ -74,7 +75,7 @@ watch(search, debounce(function (value) {
                 </table>
             </div>
             <Pagination :links="users.links" class="mt-6" />
-        </div>
+
 
     </AdminLayout>
 </template>

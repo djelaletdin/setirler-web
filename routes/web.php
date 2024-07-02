@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LikeController;
 use Illuminate\Foundation\Application;
@@ -80,10 +81,13 @@ Route::controller(ProfileController::class)->middleware('auth')->group(function 
 */
 
 Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard.index');
+
     Route::get('/admin/poems', [AdminPoemController::class, 'index'])->name('poems.index');
     Route::get('/admin/poems/{poem:slug}/edit', [AdminPoemController::class, 'edit'])->name('poems.edit');
     Route::get('/admin/poems/unpublished', [AdminPoemController::class, 'unpublished'])->name('poems.unpublished');
     Route::put('/admin/poems/{poem}', [AdminPoemController::class, 'update'])->name('poems.update');
+    Route::put('/admin/poems/{poem:slug}', [AdminPoemController::class, 'update_status'])->name('poems.update_status');
 
     Route::get('/admin/users', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/admin/users/{user:username}/edit', [AdminUserController::class, 'edit'])->name('users.edit');

@@ -1,9 +1,10 @@
 <script setup>
-import { watch, ref } from 'vue';
+import {ref, watch} from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import {Head, Link, router} from '@inertiajs/vue3';
 import Pagination from "@/Components/Pagination.vue";
 import debounce from "lodash/debounce";
+import {useForm} from "@inertiajs/inertia-vue3";
 
 const props = defineProps({
     poems: Object,
@@ -16,6 +17,26 @@ watch(search, debounce(function (value) {
     router.get('/admin/poems', { search: value}, { preserveState: true })
     console.log(value)
 }, 300));
+
+
+const successMessage = ref('')
+
+const form = useForm({
+    status: 1,
+})
+
+const makeStatusPublished = async(slug)=>{
+
+    // form.status = 1;
+
+    const response = await form.put(route('admin.poems.update_status', slug))
+
+    if (response.success) {
+        successMessage.value = response.success
+    }
+
+    console.log(props.poems[0])
+}
 
 </script>
 
@@ -55,6 +76,9 @@ watch(search, debounce(function (value) {
                         <th scope="col" class="px-6 py-3">
                             View
                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            Status
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -70,6 +94,30 @@ watch(search, debounce(function (value) {
                         </td>
                         <td class="px-6 py-4">
                             {{ poem.view_count}}
+                        </td>
+                        <td class="px-6 py-4 text-sm leading-6 sm:pr-8 lg:pr-20">
+                            <!--                                ACTIVE GREEN-->
+                            <div v-if="poem.status===1" class="flex items-center justify-end gap-x-2 sm:justify-start">
+                                <div class="flex-none rounded-full p-1 text-green-400 bg-green-400/10">
+                                    <div class="h-1.5 w-1.5 rounded-full bg-current"></div>
+                                </div>
+                                <div class="hidden sm:block">Active</div>
+                            </div>
+                            <!--                                PENDING ORANGE-->
+                            <div v-if="poem.status===0" class="flex items-center justify-end gap-x-2 sm:justify-start">
+                                <div class="flex-none rounded-full p-1 text-orange-400 bg-orange-400/10">
+                                    <div class="h-1.5 w-1.5 rounded-full bg-current"></div>
+                                </div>
+                                <div class="hidden sm:block">Pending</div>
+                                <button @click="makeStatusPublished(poem,poem)" type="button" class="ml-4 rounded-md px-6 py-2 font-medium text-green-500 hover:text-green-700 hover:bg-gray-200 inline-flex items-center gap-x-1.5 leading-6 ">
+
+                                    <svg class="w-6 h-6 fill-green-100"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+
+                                    Publish
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
