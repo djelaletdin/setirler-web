@@ -5,7 +5,12 @@ import {Head, Link, router} from '@inertiajs/vue3';
 import Pagination from "@/Components/Pagination.vue";
 import debounce from "lodash/debounce";
 
-const props = defineProps({})
+const props = defineProps({
+    visitorCounts: Object,
+    selectedDay: Number,
+    poemCount: Number,
+
+})
 
 </script>
 
@@ -22,9 +27,9 @@ const props = defineProps({})
                     <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
                         <h1 class="text-base font-semibold leading-7 text-gray-900">Hasabat</h1>
                         <div class="order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">
-                            <a href="#" class="text-indigo-600">Soňky 7 gün</a>
-                            <a href="#" class="text-gray-700">Soňky 30 gün</a>
-                            <a href="#" class="text-gray-700">Hemmesi</a>
+                            <Link :href="route('admin.dashboard.index', { d: 7 })" :class="selectedDay === 7 ? 'text-indigo-600' : 'text-gray-700'">Soňky 7 gün</Link>
+                            <Link :href="route('admin.dashboard.index', { d: 30 })" :class="selectedDay === 30 ? 'text-indigo-600' : 'text-gray-700'">Soňky 30 gün</Link>
+                            <Link :href="route('admin.dashboard.index', { d: 0 })" :class="selectedDay === 0 ? 'text-indigo-600' : 'text-gray-700'">Hemmesi</Link>
                         </div>
                     </div>
                 </header>
@@ -35,12 +40,17 @@ const props = defineProps({})
                         <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8">
                             <dt class="text-sm font-medium leading-6 text-gray-500">Eserler</dt>
                             <dd class="text-xs font-medium text-green-400">+54.02%</dd>
-                            <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">1234</dd>
+                            <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
+                                {{ poemCount }}</dd>
                         </div>
                         <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 sm:border-l">
                             <dt class="text-sm font-medium leading-6 text-gray-500">Ulanyjylar</dt>
-                            <dd class="text-xs font-medium text-rose-400">-4.02%</dd>
-                            <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">456</dd>
+                            <div class="w-full flex-none">
+                                <dd class=" text-3xl font-medium leading-10 tracking-tight text-gray-900">{{visitorCounts.unique}}</dd>
+                                <dd class="w-full flex-none text-lg font-small leading-10 tracking-tight text-gray-500"> ({{visitorCounts.total}})</dd>
+                            </div>
+
+
                         </div>
 
                     </dl>
