@@ -55,13 +55,23 @@ class AdminDashboardController extends Controller
             $poemCount = Poem::count();
         }
 
+        $unpublishedPoems = Poem::where('status', 0)
+            ->select('id','title', 'user_id', 'created_at')
+            ->with('user:id,name')
+            ->get()
+            ->map(function ($poem) {
+                $poem->date = date('M d', strtotime($poem->created_at));
+                return $poem;
+            });
 
+//        dd($unpublishedPoems);
 
         // Pass the data to the view
         return Inertia::render('Admin/Dashboard', [
             'visitorCounts' => $visitorCounts,
             'poemCount' => $poemCount,
-            'selectedDay' => (int)$days
+            'selectedDay' => (int)$days,
+            'unpublishedPoems' => $unpublishedPoems->all(),
         ]);
 
     }

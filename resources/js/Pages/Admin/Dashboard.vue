@@ -7,9 +7,9 @@ import debounce from "lodash/debounce";
 
 const props = defineProps({
     visitorCounts: Object,
+    unpublishedPoems: Object,
     selectedDay: Number,
     poemCount: Number,
-
 })
 
 </script>
@@ -49,10 +49,7 @@ const props = defineProps({
                                 <dd class=" text-3xl font-medium leading-10 tracking-tight text-gray-900">{{visitorCounts.unique}}</dd>
                                 <dd class="w-full flex-none text-lg font-small leading-10 tracking-tight text-gray-500"> ({{visitorCounts.total}})</dd>
                             </div>
-
-
                         </div>
-
                     </dl>
                 </div>
 
@@ -65,7 +62,7 @@ const props = defineProps({
                 <!-- Recent activity table -->
                 <div>
                     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                        <h2 class="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">Soňky üýtgeşmeler</h2>
+                        <h2 class="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">Goşulmadyk goşgular</h2>
                     </div>
                     <div class="mt-6 overflow-hidden border-t border-gray-100">
                         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -80,8 +77,10 @@ const props = defineProps({
                                     </thead>
                                     <tbody>
 
-                                    <tr>
-                                        <td class="relative py-5 pr-6">
+
+
+                                    <tr  v-for="poem in unpublishedPoems">
+                                        <td  class="relative py-5 pr-6">
                                             <div class="flex gap-x-6">
                                                 <svg class="hidden h-auto w-5 flex-none text-gray-400 sm:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M5.337 21.718a6.707 6.707 0 0 1-.533-.074.75.75 0 0 1-.44-1.223 3.73 3.73 0 0 0 .814-1.686c.023-.115-.022-.317-.254-.543C3.274 16.587 2.25 14.41 2.25 12c0-5.03 4.428-9 9.75-9s9.75 3.97 9.75 9c0 5.03-4.428 9-9.75 9-.833 0-1.643-.097-2.417-.279a6.721 6.721 0 0 1-4.246.997Z" clip-rule="evenodd" />
@@ -89,16 +88,16 @@ const props = defineProps({
 
 
                                                 <div class="flex-auto">
-                                                    <div class="text-sm font-medium leading-6 text-gray-900">Comment Title</div>
+                                                    <div class="text-sm font-medium leading-6 text-gray-900">{{poem.title}}</div>
 
-                                                    <div class="mt-1 text-xs leading-5 text-gray-500">Username</div>
+                                                    <div class="mt-1 text-xs leading-5 text-gray-500">{{ poem.user.name }}</div>
                                                 </div>
                                             </div>
                                             <div class="absolute bottom-0 right-full h-px w-screen bg-gray-100"></div>
                                             <div class="absolute bottom-0 left-0 h-px w-screen bg-gray-100"></div>
                                         </td>
                                         <td class="hidden py-5 pr-6 sm:table-cell">
-                                            <div class="mt-1 text-sm leading-5 text-gray-500">10.02.2022</div>
+                                            <div class="mt-1 text-sm leading-5 text-gray-500">{{poem.date}}</div>
                                         </td>
                                         <td class="py-5 text-right">
                                             <div class="flex justify-end">
@@ -117,41 +116,6 @@ const props = defineProps({
                                             </div>
                                         </td>
                                     </tr>
-
-                                    <tr>
-                                        <td class="relative py-5 pr-6">
-                                            <div class="flex gap-x-6">
-
-                                                <svg class="hidden h-auto w-5 flex-none text-gray-400 sm:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" />
-                                                    <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
-                                                </svg>
-
-                                                <div class="flex-auto">
-                                                    <div class="text-sm font-medium leading-6 text-gray-900">Poem title</div>
-                                                    <div class="mt-1 text-xs leading-5 text-gray-500">Plany</div>
-                                                </div>
-                                            </div>
-                                            <div class="absolute bottom-0 right-full h-px w-screen bg-gray-100"></div>
-                                            <div class="absolute bottom-0 left-0 h-px w-screen bg-gray-100"></div>
-                                        </td>
-                                        <td class="hidden py-5 pr-6 sm:table-cell">
-                                            <div class="mt-1 text-sm leading-5 text-gray-500">12.12.2023</div>
-                                        </td>
-                                        <td class="py-5 text-right">
-
-                                            <div class="mt-1 text-xs leading-5 text-gray-500">
-                                                <div class="flex items-center justify-end gap-x-2">
-                                                    <div class="flex-none rounded-full p-1 text-green-400 bg-green-400/10">
-                                                        <div class="h-1.5 w-1.5 rounded-full bg-current"></div>
-                                                    </div>
-                                                    <div class="hidden sm:block">Active</div>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                    </tr>
-
                                     </tbody>
                                 </table>
                             </div>

@@ -12,6 +12,10 @@ class Poem extends Model
 
     protected $fillable = ['title', 'content', 'user_id', 'status'];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
     public function getRouteKeyName()
     {
         return 'slug';
