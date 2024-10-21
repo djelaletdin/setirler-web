@@ -24,7 +24,7 @@ const props = defineProps({
                 <Link :href="route('users.index')" type="button" class="text-gray-900 border border-white hover:border-gray-300 rounded-lg text-xs font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800" :class="{ 'bg-black text-white border-0 font-semibold': selectedCategory === 0, 'bg-white': selectedCategory !== 0 }" preserve-scroll>
                     Hemmesi
                 </Link>
-                <Link :href="route('users.index', {id: category.id})" v-for="category in categories" type="button"  class="text-gray-900 border border-white hover:border-gray-300 rounded-lg text-xs font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800" :class="{ 'bg-black text-white border-0 font-semibold': selectedCategory === category.id, 'bg-white': selectedCategory !== category.id }" preserve-scroll>
+                <Link :href="route('users.index', {id: category.slug})" v-for="category in categories" type="button"  class="text-gray-900 border border-white hover:border-gray-300 rounded-lg text-xs font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800" :class="{ 'bg-black text-white border-0 font-semibold': selectedCategory === category.id, 'bg-white': selectedCategory !== category.id }" preserve-scroll>
                     {{ category.name }}
                 </Link>
             </div>

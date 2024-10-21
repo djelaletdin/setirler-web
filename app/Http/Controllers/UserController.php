@@ -19,8 +19,7 @@ class UserController extends Controller
         $selectedCategory = $category ? $category->id : 0;
 
         if ($category === null) {
-            $users = User::has('poems')
-                ->whereHas('poems', function ($query) {
+            $users = User::whereHas('poems', function ($query) {
                     $query->where('status', 1);
                 })
                 ->select('id', 'name', 'username', 'photo')
@@ -28,14 +27,16 @@ class UserController extends Controller
                 ->paginate(12);
         } else {
             $users = $category->users()
-                ->whereHas('poems')
+                ->whereHas('poems', function ($query) {
+                    $query->where('status', 1);
+                })
                 ->select('id', 'name', 'username', 'photo')
                 ->withCount('poems')
                 ->paginate(12);
         }
 
 
-
+//dd($selectedCategory);
         return Inertia::render('User/Index', [
             'users' => $users,
             'categories' => $categories,

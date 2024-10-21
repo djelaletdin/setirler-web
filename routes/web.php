@@ -39,7 +39,7 @@ Route::controller(DashboardController::class)->group(function () {
 
 
 Route::controller(UserController::class)->group(function () {
-    Route::get('/users/{category?}', 'index')->name('users.index');
+    Route::get('/users/{category:slug?}', 'index')->name('users.index');
     Route::get('/@{user:username}', 'show')->name('users.show');
 });
 
