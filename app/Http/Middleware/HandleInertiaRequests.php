@@ -44,8 +44,6 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => fn () => $request->session()->get('message')
             ],
-            'unpublished_count' => fn () => Poem::where('status',0)->count(),
-            'poems_count' => fn () => Poem::count(),
         ]);
     }
 }
