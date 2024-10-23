@@ -18,25 +18,18 @@ class UserController extends Controller
         $categories = Category::all();
         $selectedCategory = $category ? $category->id : 0;
 
-        if ($category === null) {
-            $users = User::whereHas('poems', function ($query) {
-                    $query->where('status', 1);
-                })
-                ->select('id', 'name', 'username', 'photo')
-                ->withCount('poems')
-                ->paginate(12);
-        } else {
-            $users = $category->users()
-                ->whereHas('poems', function ($query) {
-                    $query->where('status', 1);
-                })
-                ->select('id', 'name', 'username', 'photo')
-                ->withCount('poems')
-                ->paginate(12);
-        }
+        $users = User::select('id', 'name', 'username', 'photo')
+            ->when($category, function ($query, $category) {
+                $query->where('category_id', $category->id);
+            })
+            ->withCount(['poems' => function ($query) {
+                $query->where('status', 1);
+            }])
+            ->whereHas('poems', function ($query) {
+                $query->where('status', 1);
+            })
+            ->paginate(12);
 
-
-//dd($selectedCategory);
         return Inertia::render('User/Index', [
             'users' => $users,
             'categories' => $categories,
