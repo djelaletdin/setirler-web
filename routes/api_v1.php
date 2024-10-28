@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\v1\HomePageController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\api\v1\PoemController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', HomePageController::class);
+
+Route::get('/poems/{poem}', [PoemController::class, 'show'])->name('api.poems.show');
