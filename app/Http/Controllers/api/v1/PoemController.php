@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Like;
 use App\Models\Poem;
 use Illuminate\Http\Request;
 
@@ -77,13 +78,12 @@ class PoemController extends Controller
                     'date' => date('M d', strtotime($comment->created_at)),
                     'user' => $comment->user->name,
                     'replies_count' => $comment->replies_count,
-                    'userVote' => $user ? $comment->votes->first()?->direction : null,
+                    'userVote' => $user ? $comment->votes->first()?->vote : null,
                 ];
             });
 
         // Check if the user liked the poem
         $userLikedPoem = $user && Like::userLikedPoem($user->id, $poem->id);
-        dd($comments);
         // Prepare the response data
         return response()->json([
             'poem' => [

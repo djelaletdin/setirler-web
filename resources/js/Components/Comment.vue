@@ -34,11 +34,6 @@ function deleteComment(comment) {
     router.delete(`/comments/${comment}/`, {preserveScroll: true})
 }
 
-function like(poem) {
-    // router.post(`/poems/${poem}/like`)
-    router.post(`/poems/${poem}/like`, {}, {preserveScroll: true, only: ['userLikedPoem', 'poem']})
-
-}
 
 function vote(comment, direction) {
     router.post(`/comments/${comment.id}/votes`, { direction: direction }, {preserveScroll: true})

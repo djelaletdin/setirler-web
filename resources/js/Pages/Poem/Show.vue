@@ -19,6 +19,12 @@ const form = useForm({
     body: null,
 })
 
+function like(poem) {
+    // router.post(`/poems/${poem}/like`)
+    router.post(`/poems/${poem}/like`, {}, {preserveScroll: true, only: ['userLikedPoem', 'poem']})
+
+}
+
 form.reset()
 
 </script>

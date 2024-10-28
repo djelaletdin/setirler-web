@@ -110,7 +110,7 @@ class PoemController extends Controller
             ->map(function ($comment) use ($user) {
                 $comment->date = date('M d', strtotime($comment->created_at));
                 $comment->user = $comment->user->name;
-                $comment->userVote = $user ? $comment->votes->first()?->direction : null;
+                $comment->userVote = $user ? $comment->votes->first()?->vote : null;
                 return $comment;
 
             });
