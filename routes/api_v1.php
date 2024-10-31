@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\v1\AuthController;
 use App\Http\Controllers\api\v1\HomePageController;
 use App\Http\Controllers\api\v1\PoemController;
 use Illuminate\Support\Facades\Route;
@@ -18,3 +19,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomePageController::class);
 
 Route::get('/poems/{poem}', [PoemController::class, 'show'])->name('api.poems.show');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
