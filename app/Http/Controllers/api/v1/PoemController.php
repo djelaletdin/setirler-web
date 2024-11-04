@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Like;
 use App\Models\Poem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PoemController extends Controller
 {
@@ -34,7 +35,10 @@ class PoemController extends Controller
         $poem->makeHidden(['created_at', 'updated_at', 'status']);
 
         // Get the current user or IP address
-        $user = auth()->user();
+        if (request()->bearerToken() && $user = Auth::guard('sanctum')->user()) {
+            Auth::setUser($user);
+        }
+
         $ipAddress = request()->ip();
 
         // Get the last view record for the user or IP address

@@ -22,7 +22,7 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'message' => 'Credentials are incorrect',
-            ]);
+            ], 401);
         }
 
         $user = $request->user();
@@ -34,7 +34,7 @@ class AuthController extends Controller
         ], 200);
     }
 
-    // Logout method
+    // Logout method/**/
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();

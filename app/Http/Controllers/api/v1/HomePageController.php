@@ -25,7 +25,7 @@ class HomePageController extends Controller
         // Format each poem's content and date
         $newPoems = $newPoems->map(function ($poem) {
             // Break the content text at the first two consecutive line breaks
-            $poem->content = explode("\r\n\r\n", $poem->content)[0];
+            $poem->content = $poem->contentBreak();
             $poem->date = date('M d', strtotime($poem->created_at));
             return $poem;
         });
@@ -51,7 +51,7 @@ class HomePageController extends Controller
 
         $topPoems = $topPoems->map(function ($item) use ($poems) {
             $poem = $poems->where('id', $item->poem_id)->first();
-            $item->content = explode("\r\n\r\n", $poem->content)[0];
+            $item->content = $poem->contentBreak();
             $item->title = $poem->title;
             $item->slug = $poem->slug;
 //            $item->tags = $poem->tags;

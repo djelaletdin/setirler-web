@@ -80,4 +80,9 @@ class Poem extends Model
     {
         return $this->likes()->count();
     }
+
+    public function contentBreak(){
+        $parts = explode("\r\n", $this->content);
+        return isset($parts[1]) ? $parts[0] . "\r\n" . $parts[1] : $parts[0];
+    }
 }
