@@ -28,5 +28,6 @@ Route::get('/poems/{poem}', [PoemController::class, 'show'])->name('api.poems.sh
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/poems/{poem}/comments', [CommentController::class, 'store']);
+    Route::post('/comments/{comment}/votes',[CommentController::class, 'vote']);
     Route::post('/poems/{poem}/like', [LikeController::class, 'store']);
 });

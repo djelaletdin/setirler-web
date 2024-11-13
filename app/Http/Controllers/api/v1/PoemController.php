@@ -34,84 +34,68 @@ class PoemController extends Controller
         // Hide specific columns
         $poem->makeHidden(['created_at', 'updated_at', 'status']);
 
-        // Get the current user or IP address
+        $user = auth()->user();
+
         if (request()->bearerToken() && $user = Auth::guard('sanctum')->user()) {
             Auth::setUser($user);
         }
+        // Lmits the columns visible to the users
 
-        $ipAddress = request()->ip();
+        // Keep track of viewing for both users and guests
+
 
         // Get the last view record for the user or IP address
         $lastView = $user
             ? $poem->views()->where('user_id', $user->id)->latest()->first()
-            : $poem->views()->where('ip_address', $ipAddress)->latest()->first();
+            : $poem->views()->where('ip_address', request()->ip())->latest()->first();
 
-        // Check if there is a last view within a minute
+        // Check if there is a last view within a minutes
         if (!$lastView || $lastView->created_at->diffInMinutes(now()) >= 1) {
-            $poem->views()->create([
-                'user_id' => $user?->id,
-                'ip_address' => $user ? null : $ipAddress,
-            ]);
+            if ($user) {
+                $poem->views()->create([
+                    'user_id' => $user->id,
+                ]);
+            } else {
+                $ipAddress = request()->ip();
+                $poem->views()->create([
+                    'ip_address' => $ipAddress,
+                ]);
+            }
         }
 
-        // Get total and unique view counts
         $totalViews = $poem->totalViews();
         $uniqueViews = $poem->uniqueViews();
 
-        // Load the necessary relationships and counts
-        $poem->load(['user:id,username,name', 'tags:id,name,slug']);
+
+        $poem->load('user:id,username,name');
+        $poem->load('tags:id,name,slug');
         $poem->likeCount = $poem->likeCount();
 
-        // Get the comments and their data
+
         $comments = $poem->comments()
             ->withCount('replies')
-            ->with([
-                'user:id,name',
-                'replies.user:id,name',
-                'votes' => function ($query) use ($user) {
-                    if ($user) {
-                        $query->where('user_id', $user->id);
-                    }
+            ->with(['user:id,name', 'replies.user:id,name', 'votes' => function ($query) use ($user) {
+                if ($user) {
+                    $query->where('user_id', $user->id); //get votes where user_id is equal to the authenticated user
                 }
-            ])
+            }])
             ->get()
             ->map(function ($comment) use ($user) {
-                return [
-                    'id' => $comment->id,
-                    'body' => $comment->body,
-                    'date' => date('M d', strtotime($comment->created_at)),
-                    'user' => $comment->user->name,
-                    'replies_count' => $comment->replies_count,
-                    'userVote' => $user ? $comment->votes->first()?->vote : null,
-                ];
-            });
+                $comment->date = date('M d', strtotime($comment->created_at));
+                $comment->user = $comment->user->name;
+                $comment->userVote = $user ? $comment->votes->first()?->vote : null;
+                return $comment;
 
-        // Check if the user liked the poem
+            });
         $userLikedPoem = $user && Like::userLikedPoem($user->id, $poem->id);
-        // Prepare the response data
+
         return response()->json([
-            'poem' => [
-                'id' => $poem->id,
-                'title' => $poem->title,
-                'content' => $poem->content,
-                'slug' => $poem->slug,
-                'likeCount' => $poem->likeCount,
-                'user' => [
-                    'id' => $poem->user->id,
-                    'username' => $poem->user->username,
-                    'name' => $poem->user->name,
-                ],
-                'tags' => $poem->tags->map(fn($tag) => [
-                    'id' => $tag->id,
-                    'name' => $tag->name,
-                    'slug' => $tag->slug,
-                ]),
-            ],
+            'poem' => $poem,
             'comments' => $comments,
             'totalViews' => $totalViews,
             'uniqueViews' => $uniqueViews,
             'userLikedPoem' => $userLikedPoem,
-            'commentCount' => $comments->count(),
+            'commentCount' => $comments->count()
         ]);
     }
 
