@@ -31,6 +31,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Login successful',
             'token' => $token,
+            'username' => $user->name,
         ], 200);
     }
 
@@ -45,14 +46,16 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users',
+            'username' => 'required|max:255',
+            'password' => 'required|min:8',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'username' => $request->username,
             'password' => Hash::make($request->password),
             'category_id' => 4,
         ]);
@@ -60,7 +63,7 @@ class AuthController extends Controller
         $token = $user->createToken('API Token')->plainTextToken;
 
 
-        return response()->json(['message' => 'User registered successfully', 'token' => $token], 201);
+        return response()->json(['username' => $user->name, 'token' => $token], 200);
     }
 
 
