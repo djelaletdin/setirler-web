@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PoemController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\SearchController;
 
 use App\Http\Controllers\Admin\PoemController as AdminPoemController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -37,6 +38,7 @@ Route::controller(DashboardController::class)->group(function () {
     Route::get('/', 'index')->name('dashboard');
 });
 
+Route::get('/search', [SearchController::class, 'index']);
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{category:slug?}', 'index')->name('users.index');
